@@ -1,0 +1,46 @@
+possible actions:
+
+{
+  type: "ADD_BUDGET_CATEGORY"
+  name: "Groceries"
+  max: 100
+}
+
+{
+  type: "REMOVE_BUDGET_CATEGORY"
+  index: 1
+}
+
+{
+  type: "ADJUST_BUDGET_CATEGORY",
+  updated_name: "Groceries",
+  updated_max: 200
+}
+
+{
+  type: "MOVE_BUDGET_CATEGORY",
+  old_index: 0,
+  new_index: 1
+}
+
+possible state tree:
+{
+  expenses: [
+    {
+      name: "Groceries",
+      max: 100,
+      transactions: [
+        {
+          name: "HEB",
+          date: "1-24-20 2:00pm",
+          expense: 50
+        }
+      ]
+    },
+    {
+      name: "Allowance",
+      max: 200,
+      transactions: []
+    }
+  ]
+}
