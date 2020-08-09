@@ -11,7 +11,12 @@ import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
 
 import { createStore } from 'redux';
-import budgetApp, { addBudget, updateBudget } from './redux-playground/actions';
+import budgetApp, { addBudget, updateBudget, incrementCounter } from './redux-playground/actions';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
+import CounterContainer from './redux-playground/countainers/CounterContainer';
+
+
 
 const store = createStore(budgetApp);
 
@@ -26,19 +31,6 @@ const unsubscribe = store.subscribe(() =>
 
 store.dispatch(addBudget('Groceries', 123));
 store.dispatch(addBudget('Allowance', 456));
-
-// function HomeScreen({navigation}) {
-//   return (
-//     <SafeAreaView
-//       style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-//       <Text>Home Screen</Text>
-//       <Button title="test" onPress={() => navigation.navigate('Details')}>
-//         Go To Details
-//       </Button>
-//       {DATA.expenses.map()}
-//     </SafeAreaView>
-//   );
-// }
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -76,47 +68,6 @@ function DetailsScreen({ navigation }) {
 }
 
 const Stack = createStackNavigator();
-
-function Counter({ value, budgets }) {
-  console.log('COUNTER COMPONENT: ' + JSON.stringify(budgets, null, 2));
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        alignSelf: 'stretch',
-        backgroundColor: '#FDD7E4',
-      }}>
-      <Text>Count: {value}</Text>
-      {budgets.map((budget, index) => {
-        console.log(`${index} ${budget.name}`);
-        return (
-          <View
-            key={index}
-            style={{
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flexDirection: 'row',
-              backgroundColor: 'red',
-              alignSelf: 'stretch',
-              // width: 200,
-              // width: "100%",
-            }}>
-            <Text>{budget.name}</Text>
-            <Text>{budget.max}</Text>
-          </View>
-        );
-      })}
-    </View>
-  );
-}
-
-const CounterContainer = connect((state) => ({
-  value: state.test_counter,
-  budgets: state.budgets,
-}))(Counter);
 
 function App() {
   return (

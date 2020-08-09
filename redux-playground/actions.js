@@ -1,6 +1,7 @@
 // actions
 export const ADD_BUDGET = 'ADD_BUDGET';
 export const UPDATE_BUDGET = 'UPDATE_BUDGET';
+export const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
 // export const ADD_TRANSACTION = 'ADD_TRANSACTION';
 
 // action creators
@@ -17,6 +18,10 @@ export const updateBudget = (index, text, max) => ({
   max: max,
 });
 
+export const incrementCounter = () => ({
+  type: INCREMENT_COUNTER,
+});
+
 // separate file
 
 // keep data separate from UI state
@@ -25,6 +30,7 @@ const initialState = {
   test_counter: 0,
 };
 
+// Reducer
 const budgetApp = (state = initialState, action) => {
   console.log('previous state: ');
   console.log(JSON.stringify(state, null, 2));
@@ -58,6 +64,10 @@ const budgetApp = (state = initialState, action) => {
             return budget;
           }),
         ],
+      });
+    case INCREMENT_COUNTER:
+      return Object.assign({}, state, {
+        test_counter: state.test_counter + 1,
       });
     default:
       return state;
