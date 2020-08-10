@@ -11,10 +11,18 @@ import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
 
 import { createStore } from 'redux';
-import budgetApp, { addBudget, updateBudget, incrementCounter, addBudgetObj } from './redux-playground/actions';
+import budgetApp, {
+  addBudget,
+  updateBudget,
+  incrementCounter,
+  addBudgetObj,
+} from './redux-playground/actions';
+
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import CounterContainer from './redux-playground/countainers/CounterContainer';
+
+import BudgetDetails from './views/BudgetDetails';
 
 import AddBudgetElements from './components/AddBudget';
 import ListBudget from './components/ListBudget';
@@ -112,6 +120,11 @@ function App() {
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Details" component={DetailsScreen} />
+          <Stack.Screen
+            name="BudgetDetails"
+            component={BudgetDetails}
+            // options={(route) => ({ title: route.params.count })}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

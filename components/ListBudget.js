@@ -13,9 +13,14 @@ import { Button, ListItem } from 'react-native-elements';
 
 import StyledText, { StyledHeader, text_styles } from './StyledText';
 
+import { useNavigation } from '@react-navigation/native';
+
+import BudgetItem from './BudgetItem';
+
 import * as Progress from 'react-native-progress';
 
 import { connect } from 'react-redux';
+import { NavigationContainer } from '@react-navigation/native';
 
 const window = Dimensions.get('window');
 const screen = Dimensions.get('screen');
@@ -54,29 +59,29 @@ const ListBudget = ({ budgets }) => {
       }}
       // extraData={budgets}
       renderItem={(item) => {
-        console.log(`budget: ${JSON.stringify(item, null, 2)}`);
-        return (
-          <ListItem
-            // containerStyle={{ width: dimensions.window.width-10, margin: 4}}
-            // style={styles.listItem}
-            titleStyle={text_styles.largeText}
-            title={item.item.budgetName}
-            subtitle={
-              <Progress.Bar
-                animated
-                borderWidth={1}
-                borderColor={'#ccc'}
-                height={20}
-                progress={0.5}
-              />
-            }
-            rightTitle={'$' + item.item.budgetMax}
-            rightTitleStyle={text_styles.baseText}
-            bottomDivider
-            chevron
-            // checkmark={true}
-          />
-        );
+        // console.log(`budget: ${JSON.stringify(item, null, 2)}`);
+        // return (
+        //   <ListItem
+        //     // containerStyle={{ width: dimensions.window.width-10, margin: 4}}
+        //     // style={styles.listItem}
+        //     titleStyle={text_styles.largeText}
+        //     title={item.item.budgetName}
+        //     subtitle={
+        //       <Progress.Bar
+        //         animated
+        //         borderWidth={1}
+        //         borderColor={'#ccc'}
+        //         height={20}
+        //         progress={0.5}
+        //       />
+        //     }
+        //     rightTitle={'$' + item.item.budgetMax}
+        //     rightTitleStyle={text_styles.baseText}
+        //     bottomDivider
+        //     chevron
+        //     // checkmark={true}
+        //   />
+        return <BudgetItem item={item} onPressDetails />;
       }}
     />
     // </View>
