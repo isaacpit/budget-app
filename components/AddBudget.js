@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Text, View, TextInput, Alert, StyleSheet } from 'react-native';
 
-import { Button, FlatList } from 'react-native-elements';
+import { Button as ElementsButton, FlatList } from 'react-native-elements';
 
 import { connect } from 'react-redux';
 
@@ -11,33 +11,50 @@ import { addBudgetObj } from '../redux-playground/actions';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
+import StyledText from '../components/StyledText';
+
 const AddBudgetElements = ({ budgets, sendBudget }) => {
-  const [budgetNameValue, onNameValueChange] = React.useState('');
-  const [budgetMaxValue, onMaxValueChange] = React.useState('');
+  const [budgetNameValue, setBudgetName] = React.useState('');
+  const [budgetMaxValue, setBudgetMax] = React.useState('');
 
   const validate = (text) => {
     if (/^\d+$/.test(text.toString()) || /^$/.test(text.toString())) {
-      onMaxValueChange(text);
+      setBudgetMax(text);
     } else {
       Alert.alert('Invalid input, numbers only.');
     }
   };
 
+  const checkValuesAreNonEmpty = (text) => {
+    if (text) {
+      return true;
+    }
+    return false;
+  };
+
+  const addToBudgetList = () => {
+    if (
+      !checkValuesAreNonEmpty(budgetNameValue) ||
+      !checkValuesAreNonEmpty(budgetMaxValue)
+    ) {
+      Alert.alert("New budget can't have empty values");
+      return false;
+    }
+
+    const uuid = uuidv4();
+    sendBudget(uuid, budgetNameValue, budgetMaxValue);
+    setBudgetName('');
+    setBudgetMax('');
+  };
+
   return (
     <View>
-      <Button
-        title="Add Budget"
-        onPress={() => {
-          const uuid = uuidv4();
-          sendBudget(uuid, budgetNameValue, budgetMaxValue);
-          Alert.alert('added budget obj');
-        }}
-      />
+      <ElementsButton title="Add Budget" onPress={addToBudgetList} />
       <View style={styles.rowContainer}>
         <TextInput
           style={styles.textInput}
           value={budgetNameValue}
-          onChangeText={(text) => onNameValueChange(text)}
+          onChangeText={(text) => setBudgetName(text)}
           placeholder="Budget Name"
           maxLength={10}
         />
@@ -65,7 +82,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ddd',
     padding: 6,
     margin: 4,
-    width: 150,
+    // width: 150,
   },
   dollarSign: {
     fontSize: 20,

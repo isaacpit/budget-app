@@ -1,7 +1,7 @@
 // In App.js in a new project
 
 import * as React from 'react';
-import { View, Text, Button, TextInput } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,6 +17,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import CounterContainer from './redux-playground/countainers/CounterContainer';
 
 import AddBudgetElements from './components/AddBudget';
+import ListBudget from './components/ListBudget';
 
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
@@ -78,21 +79,17 @@ class HomeScreen extends React.Component {
   }
   render() {
     return (
-      <SafeAreaView
-        style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Home Screen</Text>
+      <SafeAreaView style={styles.topLevelContainer}>
+        {/* <Text>Home Screen</Text> */}
         {/* <ListExpenses></ListExpenses> */}
         <Button
-          title="test"
+          title="Go to Details"
           onPress={() => this.props.navigation.navigate('Details')}>
           Go To Details
         </Button>
-        <Button
-          title="Add Budget"
-          onPress={() => store.dispatch(addBudget('Groceries', 123))}
-        />
-        <AddBudgetElements></AddBudgetElements>
-        <CounterContainer />
+        <AddBudgetElements />
+        <ListBudget />
+        {/* <CounterContainer /> */}
       </SafeAreaView>
     );
   }
@@ -120,5 +117,16 @@ function App() {
     </Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  topLevelContainer: {
+    flex: 1,
+    // alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  baseText: {
+    fontFamily: 'Cochin',
+  }
+});
 
 export default App;

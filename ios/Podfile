@@ -21,6 +21,7 @@ target 'MessingAround2' do
   post_install do |installer|
     flipper_post_install(installer)
   end
+
 end
 
 target 'MessingAround2-tvOS' do
