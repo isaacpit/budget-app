@@ -6,13 +6,13 @@ import { incrementCounter } from '../actions';
 import Counter from '../presentational-components/Counter';
 
 // grabs important state values 
-const mapStateToProps = (state) => ({
-  value: state.test_counter,
+const mapStateToProps = (state, ownProps) => ({
+  test_counter: state.test_counter,
   budgets: state.budgets,
 });
 
 // states how to dispatch the functions
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
   incrementCounter: () => dispatch(incrementCounter()),
 });
 

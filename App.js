@@ -11,12 +11,15 @@ import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
 
 import { createStore } from 'redux';
-import budgetApp, { addBudget, updateBudget, incrementCounter } from './redux-playground/actions';
+import budgetApp, { addBudget, updateBudget, incrementCounter, addBudgetObj } from './redux-playground/actions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import CounterContainer from './redux-playground/countainers/CounterContainer';
 
+import AddBudgetElements from './components/AddBudget';
 
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 const store = createStore(budgetApp);
 
@@ -31,6 +34,41 @@ const unsubscribe = store.subscribe(() =>
 
 store.dispatch(addBudget('Groceries', 123));
 store.dispatch(addBudget('Allowance', 456));
+const some_id = uuidv4();
+const fake_id = 44;
+store.dispatch(addBudgetObj(some_id, 'some_name', 100));
+
+console.log(
+  `CHECKER state: ${JSON.stringify(
+    store.getState().mapBudgetIdToData.hasOwnProperty(some_id),
+    null,
+    2,
+  )}`,
+);
+
+console.log(
+  `state: ${JSON.stringify(
+    store.getState().mapBudgetIdToData[some_id],
+    null,
+    2,
+  )}`,
+);
+
+console.log(
+  `FAKE state: ${JSON.stringify(
+    store.getState().mapBudgetIdToData.hasOwnProperty(fake_id),
+    null,
+    2,
+  )}`,
+);
+
+console.log(
+  `FAKE state: ${JSON.stringify(
+    store.getState().mapBudgetIdToData[fake_id],
+    null,
+    2,
+  )}`,
+);
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -53,6 +91,7 @@ class HomeScreen extends React.Component {
           title="Add Budget"
           onPress={() => store.dispatch(addBudget('Groceries', 123))}
         />
+        <AddBudgetElements></AddBudgetElements>
         <CounterContainer />
       </SafeAreaView>
     );

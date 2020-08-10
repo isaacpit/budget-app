@@ -7,7 +7,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 import PropTypes from 'prop-types';
 
-function Counter({ value, budgets, incrementCounter }) {
+// presentational component
+
+function Counter({ test_counter, budgets, incrementCounter }) {
   console.log('COUNTER COMPONENT: ' + JSON.stringify(budgets, null, 2));
   return (
     <View
@@ -18,6 +20,7 @@ function Counter({ value, budgets, incrementCounter }) {
         flexDirection: 'column',
         alignSelf: 'stretch',
         backgroundColor: '#FDD7E4',
+        padding: 10,
       }}>
       <Button title="Increment Counter" onPress={() => incrementCounter()} />
       <Button
@@ -27,7 +30,7 @@ function Counter({ value, budgets, incrementCounter }) {
           incrementCounter();
         }}
       />
-      <Text>Count: {value}</Text>
+      <Text>Count: {test_counter}</Text>
 
       {budgets.map((budget, index) => {
         console.log(`${index} ${budget.name}`);
@@ -40,6 +43,7 @@ function Counter({ value, budgets, incrementCounter }) {
               flexDirection: 'row',
               backgroundColor: 'red',
               alignSelf: 'stretch',
+              padding: 10,
               // width: 200,
               // width: "100%",
             }}>
@@ -51,6 +55,9 @@ function Counter({ value, budgets, incrementCounter }) {
     </View>
   );
 }
-// Counter.propTypes =
+
+Counter.propTypes = {
+  test_counter: PropTypes.number.isRequired,
+};
 
 export default Counter;
