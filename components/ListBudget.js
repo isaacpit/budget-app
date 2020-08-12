@@ -28,7 +28,7 @@ const screen = Dimensions.get('screen');
 const ListBudgetHeader = () => {
   return (
     <View style={styles.listBudgetHeaderContainer}>
-      <StyledHeader>Some Thing</StyledHeader>
+      <StyledHeader>Budgets</StyledHeader>
     </View>
   );
 };
@@ -114,8 +114,9 @@ const styles = StyleSheet.create({
     // flexGrow: 0,
     // flexShrink: 0,
     // maxHeight: 300,
-    maxHeight: 200,
-    backgroundColor: '#f00',
+    maxHeight: 300,
+    backgroundColor: '#ddd',
+    padding: 4,
   },
   listItemContainer: {
     // alignSelf: 'stretch',

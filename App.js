@@ -1,10 +1,13 @@
 // In App.js in a new project
 
 import * as React from 'react';
-import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import DynamicBottomSheet from './components/raw-bottom-sheet/DynamicBottomSheetExample';
+import BottomSheetExample from './components/raw-bottom-sheet/BottomSheetExample';
 
 import { connect } from 'react-redux';
 
@@ -17,6 +20,8 @@ import budgetApp, {
   incrementCounter,
   addTransactionToBudget,
 } from './redux-playground/actions';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -86,17 +91,85 @@ class HomeScreen extends React.Component {
     super(props);
     console.log('Homescreen props: ');
     console.log(JSON.stringify(props, null, 2));
+
+    this.state = {
+      isLoaded: false,
+      timeCount: 3,
+      data: null,
+    };
   }
+
+  getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@data_key');
+      console.log('jsonValue: ' + jsonValue);
+      this.setState({
+        isLoaded: true,
+        data: jsonValue,
+      });
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      // error reading value
+      Alert.alert(e);
+    }
+  };
+
+  setObjValue = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('@data_key', jsonValue);
+    } catch (e) {
+      // save error
+      Alert.alert(e);
+    }
+
+    console.log('Done.');
+  }
+
+  componentDidMount() {
+    this.intervalId = setInterval(() => {
+      console.log('ran!' + this.state.timeCount);
+      this.setState({ timeCount: parseInt(this.state.timeCount, 10) - 1 });
+      if (this.state.timeCount < 1) {
+        clearInterval(this.intervalId);
+        this.getData();
+      }
+    }, 1000);
+  }
+
+  componentWillUnMount() {
+    clearInterval(this.intervalId);
+  }
+
   render() {
     return (
       <SafeAreaView style={styles.topLevelContainer}>
         {/* <Text>Home Screen</Text> */}
         {/* <ListExpenses></ListExpenses> */}
-        <Button
-          title="Go to Details"
-          onPress={() => this.props.navigation.navigate('Details')}>
-          Go To Details
-        </Button>
+        <View style={styles.devConsole}>
+          <Button
+            title="Go to Details"
+            onPress={() => this.props.navigation.navigate('Details')}>
+            Go To Details
+          </Button>
+          <Button
+            title="Save Data"
+            onPress={() => this.setObjValue({ data: 'Saved data' })}
+          />
+          <Text style={{ fontSize: 30 }}>
+            {this.state.isLoaded ? 'Loaded data' : 'Loading!'}
+          </Text>
+          { this.state.isLoaded ? <Text>{this.state.data}</Text> : null}
+          <Text>{this.state.timeCount}</Text>
+          <Button
+            title="Dynamic Bottom Sheet"
+            onPress={() => this.props.navigation.navigate('DynamicBottomSheet')}
+          />
+          <Button
+            title="Bottom Sheet"
+            onPress={() => this.props.navigation.navigate('BottomSheet')}
+          />
+        </View>
         <AddBudgetElements />
         <ListBudget />
         {/* <CounterContainer /> */}
@@ -123,10 +196,11 @@ function App() {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Details" component={DetailsScreen} />
           <Stack.Screen
-            name="BudgetDetails"
-            component={BudgetDetails}
-            // options={(route) => ({ title: route.params.count })}
+            name="DynamicBottomSheet"
+            component={DynamicBottomSheet}
           />
+          <Stack.Screen name="BudgetDetails" component={BudgetDetails} />
+          <Stack.Screen name="BottomSheet" component={BottomSheetExample} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
@@ -134,6 +208,10 @@ function App() {
 }
 
 const styles = StyleSheet.create({
+  devConsole: {
+    backgroundColor: '#e6ffcc',
+    margin: 20,
+  },
   topLevelContainer: {
     flex: 1,
     // alignItems: 'center',
