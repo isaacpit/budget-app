@@ -16,12 +16,27 @@ import StyledText from '../components/StyledText';
 const AddBudgetElements = ({ budgets, sendBudget }) => {
   const [budgetNameValue, setBudgetName] = React.useState('');
   const [budgetMaxValue, setBudgetMax] = React.useState('');
+  const [addButtonIsEnabled, setAddButtonIsEnabled] = React.useState(false);
 
-  const validate = (text) => {
+  const validateBudgetMax = (text) => {
     if (/^\d+$/.test(text.toString()) || /^$/.test(text.toString())) {
       setBudgetMax(text);
     } else {
       Alert.alert('Invalid input, numbers only.');
+    }
+  };
+
+  const checkWhetherEnableButton = () => {
+    console.log(
+      `checkWhetherEnaledButton: ${checkValuesAreNonEmpty(
+        budgetNameValue,
+      )} ${checkValuesAreNonEmpty(budgetMaxValue)}`,
+    );
+    if (
+      checkValuesAreNonEmpty(budgetNameValue) &&
+      checkValuesAreNonEmpty(budgetMaxValue)
+    ) {
+      setAddButtonIsEnabled(true);
     }
   };
 
@@ -45,16 +60,19 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
     sendBudget(uuid, budgetNameValue, budgetMaxValue);
     setBudgetName('');
     setBudgetMax('');
+    setAddButtonIsEnabled(false);
   };
 
   return (
     <View>
-      <ElementsButton title="Add Budget" onPress={addToBudgetList} />
       <View style={styles.rowContainer}>
         <TextInput
           style={styles.textInput}
           value={budgetNameValue}
-          onChangeText={(text) => setBudgetName(text)}
+          onChangeText={(text) => {
+            setBudgetName(text);
+            checkWhetherEnableButton();
+          }}
           placeholder="Budget Name"
           maxLength={10}
         />
@@ -63,7 +81,9 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
           style={styles.textInput}
           value={budgetMaxValue}
           onChangeText={(text) => {
-            validate(text);
+            validateBudgetMax(text);
+            checkWhetherEnableButton();
+            // setIsEdited is set upon validation
           }}
           keyboardType="number-pad"
           placeholder="20"
@@ -71,6 +91,12 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
           // placeholder={'Max'}
         />
       </View>
+      <ElementsButton
+        style={styles.addButton}
+        title="Add Budget"
+        onPress={addToBudgetList}
+        disabled={!addButtonIsEnabled ? true : false}
+      />
     </View>
   );
 };
@@ -94,6 +120,9 @@ const styles = StyleSheet.create({
     padding: 20,
     alignSelf: 'stretch',
     alignItems: 'center',
+  },
+  addButton: {
+    margin: 20,
   },
 });
 

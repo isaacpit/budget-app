@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     // flexGrow: 0,
     // flexShrink: 0,
     // maxHeight: 300,
-    maxHeight: 300,
+    maxHeight: 400,
     backgroundColor: '#ddd',
     padding: 4,
   },
