@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.messingaround2"
+        applicationId "com.budgetdashboard"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

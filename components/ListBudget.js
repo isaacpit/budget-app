@@ -81,7 +81,7 @@ const ListBudget = ({ budgets }) => {
         //     chevron
         //     // checkmark={true}
         //   />
-        return <BudgetItem item={item} onPressDetails />;
+        return <BudgetItem {...item} onPressDetails />;
       }}
     />
     // </View>

@@ -15,7 +15,7 @@ import budgetApp, {
   addBudget,
   updateBudget,
   incrementCounter,
-  addBudgetObj,
+  addTransactionToBudget,
 } from './redux-playground/actions';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -41,11 +41,13 @@ const unsubscribe = store.subscribe(() =>
   console.log(JSON.stringify(store.getState(), null, 2)),
 );
 
-store.dispatch(addBudget('Groceries', 123));
-store.dispatch(addBudget('Allowance', 456));
 const some_id = uuidv4();
 const fake_id = 44;
-store.dispatch(addBudgetObj(some_id, 'some_name', 100));
+store.dispatch(addBudget(some_id, 'some_name', 100));
+
+store.dispatch(
+  addTransactionToBudget('0', '46', 'Added Transaction', 3, new Date()),
+);
 
 console.log(
   `CHECKER state: ${JSON.stringify(

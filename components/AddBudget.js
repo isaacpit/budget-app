@@ -6,7 +6,7 @@ import { Button as ElementsButton, FlatList } from 'react-native-elements';
 
 import { connect } from 'react-redux';
 
-import { addBudgetObj } from '../redux-playground/actions';
+import { addBudget } from '../redux-playground/actions';
 
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
@@ -104,7 +104,7 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch) => ({
   sendBudget: (budgetId, budgetName, budgetMax) => {
     console.log(`onSubmit: ${budgetId} ${budgetName} ${budgetMax}`);
-    dispatch(addBudgetObj(budgetId, budgetName, budgetMax));
+    dispatch(addBudget(budgetId, budgetName, budgetMax));
   },
 });
 
