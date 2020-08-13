@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Alert,
   ScrollView,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -21,9 +22,7 @@ import { connect } from 'react-redux';
 
 import { Provider } from 'react-redux';
 
-import { createStore, compose, applyMiddleware } from 'redux';
-
-import thunk from 'redux-thunk';
+import store from './store';
 
 import budgetApp, {
   addBudget,
@@ -34,10 +33,7 @@ import budgetApp, {
 
 import AsyncStorage from '@react-native-community/async-storage';
 
-import {
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { Keyboard } from 'react-native';
 
@@ -54,59 +50,6 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
 import Collapsible from 'react-native-collapsible';
-
-const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-const store = createStore(budgetApp, composeEnhancer(applyMiddleware(thunk)));
-
-// const unsubscribe = store.subscribe(() => console.log(store.getState()));
-
-console.log('Initial State:');
-console.log(store.getState());
-
-const unsubscribe = store.subscribe(() =>
-  console.log(JSON.stringify(store.getState(), null, 2)),
-);
-
-const some_id = uuidv4();
-const fake_id = 44;
-store.dispatch(addBudget(some_id, 'some_name', 100));
-
-store.dispatch(
-  addTransactionToBudget('0', '46', 'Added Transaction', 3, new Date()),
-);
-
-console.log(
-  `CHECKER state: ${JSON.stringify(
-    store.getState().mapBudgetIdToData.hasOwnProperty(some_id),
-    null,
-    2,
-  )}`,
-);
-
-console.log(
-  `state: ${JSON.stringify(
-    store.getState().mapBudgetIdToData[some_id],
-    null,
-    2,
-  )}`,
-);
-
-console.log(
-  `FAKE state: ${JSON.stringify(
-    store.getState().mapBudgetIdToData.hasOwnProperty(fake_id),
-    null,
-    2,
-  )}`,
-);
-
-console.log(
-  `FAKE state: ${JSON.stringify(
-    store.getState().mapBudgetIdToData[fake_id],
-    null,
-    2,
-  )}`,
-);
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -157,15 +100,22 @@ class HomeScreen extends React.Component {
       console.log('ran!' + this.state.timeCount);
       this.setState((prevState) => {
         return {
-          timeCount: this.state.timeCount - 1,
+          timeCount: prevState.timeCount - 1,
         };
       });
     }, 1000);
   }
 
   componentDidUpdate() {
+    console.log('looking at interval!');
+    console.log(
+      `\tstate.timeCount: ${this.state.timeCount} state.isLoaded: ${this.state.isLoaded}`,
+    );
     if (this.state.timeCount < 1 && !this.state.isLoaded) {
       console.log('clearing interval!');
+      console.log(
+        `\tstate.timeCount: ${this.state.timeCount} state.isLoaded: ${this.state.isLoaded}`,
+      );
       clearInterval(this.intervalId);
       this.getData();
     }
@@ -176,13 +126,18 @@ class HomeScreen extends React.Component {
   }
 
   toggleExpanded = () => {
-    this.setState({ collapsed: !this.state.collapsed });
+    this.setState((prevState) => {
+      return {
+        collapsed: !prevState.collapsed,
+      };
+    });
   };
 
   render() {
     return (
       // wrapped so that numeric keypad will go away
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
+      // <ScrollView contentInsetAdjustmentBehavior="automatic">
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <SafeAreaView style={styles.topLevelContainer}>
           {/* <Text>Home Screen</Text> */}
           <TouchableOpacity onPress={this.toggleExpanded}>
@@ -225,8 +180,9 @@ class HomeScreen extends React.Component {
           <AddBudgetElements />
           <ListBudget />
           {/* <CounterContainer /> */}
-        </SafeAreaView>  
-      </ScrollView>
+        </SafeAreaView>
+      {/* </ScrollView> */}
+      </TouchableWithoutFeedback>
     );
   }
 }
