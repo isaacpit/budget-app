@@ -21,7 +21,10 @@ import { connect } from 'react-redux';
 
 import { Provider } from 'react-redux';
 
-import { createStore } from 'redux';
+import { createStore, compose, applyMiddleware } from 'redux';
+
+import thunk from 'redux-thunk';
+
 import budgetApp, {
   addBudget,
   updateBudget,
@@ -52,7 +55,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 import Collapsible from 'react-native-collapsible';
 
-const store = createStore(budgetApp);
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(budgetApp, composeEnhancer(applyMiddleware(thunk)));
 
 // const unsubscribe = store.subscribe(() => console.log(store.getState()));
 

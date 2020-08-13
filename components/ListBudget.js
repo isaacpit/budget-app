@@ -55,7 +55,7 @@ const ListBudget = ({ budgets }) => {
       style={styles.flatListContainer}
       data={budgets}
       keyExtractor={(item, index) => {
-        index;
+        return String(index);
       }}
       // extraData={budgets}
       renderItem={(item) => {

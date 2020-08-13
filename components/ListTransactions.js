@@ -22,7 +22,7 @@ const ListTransaction = ({ transactions, budgetId }) => {
       {/* TODO: change to flatlist */}
       {transactions.map((item, index) => {
         return (
-          <View style={styles.rowContainer}>
+          <View style={styles.rowContainer} key={index}>
             <Text>{item.transactionName}</Text>
             <Text>{item.transactionAmount}</Text>
           </View>

@@ -18,9 +18,13 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
   const [budgetMaxValue, setBudgetMax] = React.useState('');
   const [addButtonIsEnabled, setAddButtonIsEnabled] = React.useState(false);
 
+  // Use useEffect and dependency to re-render and check value accordingly
+  // since the setBudgetName and setBudgetMax do not take effect until the next render
   const validateBudgetMax = (text) => {
     if (/^\d+$/.test(text.toString()) || /^$/.test(text.toString())) {
+      console.log(`validateBudgetMax beforeSetter: ${text} ${budgetMaxValue}`);
       setBudgetMax(text);
+      console.log(`validateBudgetMax afterSetter: ${text} ${budgetMaxValue}`);
     } else {
       Alert.alert('Invalid input, numbers only.');
     }
@@ -28,9 +32,12 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
 
   const checkWhetherEnableButton = () => {
     console.log(
-      `checkWhetherEnaledButton: ${checkValuesAreNonEmpty(
+      `checkWhetherEnabledButton: ${checkValuesAreNonEmpty(
         budgetNameValue,
       )} ${checkValuesAreNonEmpty(budgetMaxValue)}`,
+    );
+    console.log(
+      `checkWhetherEnabledButton: ${budgetNameValue} ${budgetMaxValue}`,
     );
     if (
       checkValuesAreNonEmpty(budgetNameValue) &&
@@ -68,8 +75,9 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
       <View style={styles.rowContainer}>
         <TextInput
           style={styles.textInput}
-          value={budgetNameValue}
+          // value={budgetNameValue}
           onChangeText={(text) => {
+            console.log(`budgetName: ${budgetNameValue} ${text}`);
             setBudgetName(text);
             checkWhetherEnableButton();
           }}
@@ -79,8 +87,13 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
         <Text style={styles.dollarSign}>$</Text>
         <TextInput
           style={styles.textInput}
-          value={budgetMaxValue}
+          // value={budgetMaxValue}
           onChangeText={(text) => {
+            console.log(
+              `budgetMax: ${budgetMaxValue ? budgetMaxValue : 'ValueNone'} ${
+                text ? text : 'TextNone'
+              }`,
+            );
             validateBudgetMax(text);
             checkWhetherEnableButton();
             // setIsEdited is set upon validation
@@ -107,7 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     backgroundColor: '#ddd',
     padding: 6,
-    margin: 4,
+    // margin: 4,
     // width: 150,
   },
   dollarSign: {
@@ -117,12 +130,16 @@ const styles = StyleSheet.create({
     // flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 20,
+    // padding: 8,
     alignSelf: 'stretch',
     alignItems: 'center',
+    marginHorizontal: 20,
+    marginTop: 8,
   },
   addButton: {
-    margin: 20,
+    marginTop: 8,
+    marginBottom: 10,
+    marginHorizontal: 20,
   },
 });
 
