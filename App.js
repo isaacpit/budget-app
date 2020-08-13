@@ -51,6 +51,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import Collapsible from 'react-native-collapsible';
 
+import Animated from 'react-native-reanimated';
+
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -62,6 +64,7 @@ class HomeScreen extends React.Component {
       timeCount: 3,
       data: null,
       collapsed: true,
+      y: new Animated.Value(0),
     };
   }
 
