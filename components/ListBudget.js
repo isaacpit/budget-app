@@ -35,7 +35,7 @@ const ListBudgetHeader = (props) => {
   );
 };
 
-const ListBudget = ({ budgets }) => {
+const ListBudget = ({ budgets, header }) => {
   const [dimensions, setDimensions] = useState({ window, screen });
 
   console.log(`budgets: ${JSON.stringify(budgets, null, 2)}`);
@@ -55,7 +55,7 @@ const ListBudget = ({ budgets }) => {
     // <View styles={styles.containerView}>
     <SectionList
       // contentContainerStyle={styles.flatListContainer}
-      // ListHeaderComponent={ListBudgetHeader}
+      ListHeaderComponent={header}
       style={styles.flatListContainer}
       sections={budgets}
       stickySectionHeadersEnabled={false}

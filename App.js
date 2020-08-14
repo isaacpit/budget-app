@@ -140,51 +140,63 @@ class HomeScreen extends React.Component {
     return (
       // wrapped so that numeric keypad will go away
       // <ScrollView contentInsetAdjustmentBehavior="automatic">
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <SafeAreaView style={styles.topLevelContainer}>
-          {/* <Text>Home Screen</Text> */}
-          <TouchableOpacity onPress={this.toggleExpanded}>
-            <View style={styles.header}>
-              <Text style={styles.headerText}>Menu</Text>
-            </View>
-          </TouchableOpacity>
-          <Collapsible collapsed={this.state.collapsed} align="center">
-            <View style={styles.devConsole}>
-              <Button
-                title="Go to Details"
-                onPress={() => this.props.navigation.navigate('Details')}>
-                Go To Details
-              </Button>
-              <Button
-                title="Save Data"
-                onPress={() => this.setObjValue({ data: 'Saved data' })}
-              />
-              <Text style={{ fontSize: 30 }}>
-                {this.state.isLoaded ? 'Loaded data' : 'Loading!'}
-              </Text>
-              {this.state.isLoaded ? <Text>{this.state.data}</Text> : null}
-              <Text>{this.state.timeCount}</Text>
-              <Button
-                title="Dynamic Bottom Sheet"
-                onPress={() =>
-                  this.props.navigation.navigate('DynamicBottomSheet')
-                }
-              />
-              <Button
-                title="Bottom Sheet"
-                onPress={() => this.props.navigation.navigate('BottomSheet')}
-              />
-              <Button
-                title="Collapsible"
-                onPress={() => this.props.navigation.navigate('Collapsible')}
-              />
-            </View>
-          </Collapsible>
-          <AddBudgetElements />
-          <ListBudget />
-          {/* <CounterContainer /> */}
-        </SafeAreaView>
-      {/* </ScrollView> */}
+      <TouchableWithoutFeedback
+        style={styles.topLevelContainer}
+        onPress={Keyboard.dismiss}
+        accessible={false}>
+        {/* <Text>Home Screen</Text> */}
+        <View style={styles.topLevelContainer}>
+          <ListBudget
+            header={
+              <View>
+                <TouchableOpacity onPress={this.toggleExpanded}>
+                  <View style={styles.header}>
+                    <Text style={styles.headerText}>Menu</Text>
+                  </View>
+                </TouchableOpacity>
+                <Collapsible collapsed={this.state.collapsed} align="center">
+                  <View style={styles.devConsole}>
+                    <Button
+                      title="Go to Details"
+                      onPress={() => this.props.navigation.navigate('Details')}>
+                      Go To Details
+                    </Button>
+                    <Button
+                      title="Save Data"
+                      onPress={() => this.setObjValue({ data: 'Saved data' })}
+                    />
+                    <Text style={{ fontSize: 30 }}>
+                      {this.state.isLoaded ? 'Loaded data' : 'Loading!'}
+                    </Text>
+                    {this.state.isLoaded ? (
+                      <Text>{this.state.data}</Text>
+                    ) : null}
+                    <Text>{this.state.timeCount}</Text>
+                    <Button
+                      title="Dynamic Bottom Sheet"
+                      onPress={() =>
+                        this.props.navigation.navigate('DynamicBottomSheet')
+                      }
+                    />
+                    <Button
+                      title="Bottom Sheet"
+                      onPress={() =>
+                        this.props.navigation.navigate('BottomSheet')
+                      }
+                    />
+                    <Button
+                      title="Collapsible"
+                      onPress={() =>
+                        this.props.navigation.navigate('Collapsible')
+                      }
+                    />
+                  </View>
+                </Collapsible>
+                <AddBudgetElements />
+              </View>
+            }
+          />
+        </View>
       </TouchableWithoutFeedback>
     );
   }
@@ -236,12 +248,12 @@ function App() {
 const styles = StyleSheet.create({
   devConsole: {
     backgroundColor: '#e6ffcc',
-    margin: 20,
+    // margin: 20,
   },
   topLevelContainer: {
     flex: 1,
     // alignItems: 'center',
-    justifyContent: 'flex-start',
+    // justifyContent: 'flex-start',
   },
   baseText: {
     fontFamily: 'Cochin',

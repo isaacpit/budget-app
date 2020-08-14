@@ -71,7 +71,7 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
   };
 
   return (
-    <View>
+    <View style={styles.topLevelContainer}>
       <View style={styles.rowContainer}>
         <TextInput
           style={styles.textInput}
@@ -115,6 +115,9 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
 };
 
 const styles = StyleSheet.create({
+  topLevelContainer: {
+    backgroundColor: '#eee',
+  },
   textInput: {
     fontWeight: 'bold',
     fontSize: 20,
