@@ -7,6 +7,7 @@ import budgetApp, {
   addTransactionToBudget,
 } from './redux-playground/actions';
 
+import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

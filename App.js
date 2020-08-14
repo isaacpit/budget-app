@@ -1,19 +1,20 @@
 // In App.js in a new project
 
-import * as React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   Text,
-  Button,
   TextInput,
   StyleSheet,
   Alert,
   ScrollView,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { Button } from 'react-native-elements';
 
 import DynamicBottomSheet from './components/raw-bottom-sheet/DynamicBottomSheetExample';
 import BottomSheetExample from './components/raw-bottom-sheet/BottomSheetExample';
@@ -51,87 +52,71 @@ import { v4 as uuidv4 } from 'uuid';
 
 import Collapsible from 'react-native-collapsible';
 
+import Timer from './components/Timer';
+
+import HeaderMenu from './components/HomeScreenHeaderMenu';
+
+const setObjValue = async (value) => {
+  try {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem('@data_key', jsonValue);
+  } catch (e) {
+    // save error
+    Alert.alert(e);
+  }
+
+  console.log('Done.');
+};
+
+// TODO fix this, no longer hooked up
+const getData = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem('@data_key');
+    console.log('jsonValue: ' + jsonValue);
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (e) {
+    // error reading value
+    Alert.alert(e);
+  }
+};
+
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     console.log('Homescreen props: ');
     console.log(JSON.stringify(props, null, 2));
-
-    this.state = {
-      isLoaded: false,
-      timeCount: 3,
-      data: null,
-      collapsed: true,
-    };
   }
 
-  getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@data_key');
-      console.log('jsonValue: ' + jsonValue);
-      this.setState((prevState) => {
-        return {
-          isLoaded: true,
-          data: jsonValue,
-        };
-      });
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (e) {
-      // error reading value
-      Alert.alert(e);
-    }
-  };
+  // componentDidMount() {
+  //   console.log('Homescreen mounted');
+  //   this.intervalId = setInterval(() => {
+  //     console.log('ran!' + this.state.timeCount);
+  //     this.setState((prevState) => {
+  //       return {
+  //         timeCount: prevState.timeCount - 1,
+  //       };
+  //     });
+  //   }, 1000);
+  // }
 
-  setObjValue = async (value) => {
-    try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('@data_key', jsonValue);
-    } catch (e) {
-      // save error
-      Alert.alert(e);
-    }
+  // componentDidUpdate() {
+  //   console.log('looking at interval!');
+  //   console.log(
+  //     `\tstate.timeCount: ${this.state.timeCount} state.isLoaded: ${this.state.isLoaded}`,
+  //   );
+  //   if (this.state.timeCount < 1 && !this.state.isLoaded) {
+  //     console.log('clearing interval!');
+  //     console.log(
+  //       `\tstate.timeCount: ${this.state.timeCount} state.isLoaded: ${this.state.isLoaded}`,
+  //     );
+  //     clearInterval(this.intervalId);
+  //     // this.getData();
+  //   }
+  // }
 
-    console.log('Done.');
-  };
-
-  componentDidMount() {
-    console.log('Homescreen mounted');
-    this.intervalId = setInterval(() => {
-      console.log('ran!' + this.state.timeCount);
-      this.setState((prevState) => {
-        return {
-          timeCount: prevState.timeCount - 1,
-        };
-      });
-    }, 1000);
-  }
-
-  componentDidUpdate() {
-    console.log('looking at interval!');
-    console.log(
-      `\tstate.timeCount: ${this.state.timeCount} state.isLoaded: ${this.state.isLoaded}`,
-    );
-    if (this.state.timeCount < 1 && !this.state.isLoaded) {
-      console.log('clearing interval!');
-      console.log(
-        `\tstate.timeCount: ${this.state.timeCount} state.isLoaded: ${this.state.isLoaded}`,
-      );
-      clearInterval(this.intervalId);
-      this.getData();
-    }
-  }
-
-  componentWillUnMount() {
-    clearInterval(this.intervalId);
-  }
-
-  toggleExpanded = () => {
-    this.setState((prevState) => {
-      return {
-        collapsed: !prevState.collapsed,
-      };
-    });
-  };
+  // componentWillUnMount() {
+  //   clearInterval(this.intervalId);
+  // }
 
   render() {
     return (
@@ -140,44 +125,47 @@ class HomeScreen extends React.Component {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.topLevelContainer}>
           {/* <Text>Home Screen</Text> */}
-          <TouchableOpacity onPress={this.toggleExpanded}>
-            <View style={styles.header}>
-              <Text style={styles.headerText}>Menu</Text>
-            </View>
-          </TouchableOpacity>
-          <Collapsible collapsed={this.state.collapsed} align="center">
-            <View style={styles.devConsole}>
-              <Button
-                title="Go to Details"
-                onPress={() => this.props.navigation.navigate('Details')}>
-                Go To Details
-              </Button>
-              <Button
-                title="Save Data"
-                onPress={() => this.setObjValue({ data: 'Saved data' })}
-              />
-              <Text style={{ fontSize: 30 }}>
-                {this.state.isLoaded ? 'Loaded data' : 'Loading!'}
-              </Text>
-              {this.state.isLoaded ? <Text>{this.state.data}</Text> : null}
-              <Text>{this.state.timeCount}</Text>
-              <Button
-                title="Dynamic Bottom Sheet"
-                onPress={() =>
-                  this.props.navigation.navigate('DynamicBottomSheet')
-                }
-              />
-              <Button
-                title="Bottom Sheet"
-                onPress={() => this.props.navigation.navigate('BottomSheet')}
-              />
-              <Button
-                title="Collapsible"
-                onPress={() => this.props.navigation.navigate('Collapsible')}
-              />
-            </View>
-          </Collapsible>
-          <AddBudgetElements />
+          {/* <View>
+            <TouchableOpacity onPress={this.toggleExpanded}>
+              <View style={styles.header}>
+                <Text style={styles.headerText}>Menu</Text>
+              </View>
+            </TouchableOpacity>
+            <Collapsible collapsed={this.state.collapsed} align="center">
+              <View style={styles.devConsole}>
+                <Button
+                  title="Go to Details"
+                  onPress={() => this.props.navigation.navigate('Details')}>
+                  Go To Details
+                </Button>
+                <Button
+                  title="Save Data"
+                  onPress={() => this.setObjValue({ data: 'Saved data' })}
+                />
+                <Text style={{ fontSize: 30 }}>
+                  {this.state.isLoaded ? 'Loaded data' : 'Loading!'}
+                </Text>
+                {this.state.isLoaded ? <Text>{this.state.data}</Text> : null}
+                <Text>{this.state.timeCount}</Text>
+                <Button
+                  title="Dynamic Bottom Sheet"
+                  onPress={() =>
+                    this.props.navigation.navigate('DynamicBottomSheet')
+                  }
+                />
+                <Button
+                  title="Bottom Sheet"
+                  onPress={() => this.props.navigation.navigate('BottomSheet')}
+                />
+                <Button
+                  title="Collapsible"
+                  onPress={() => this.props.navigation.navigate('Collapsible')}
+                />
+              </View>
+            </Collapsible>
+            <AddBudgetElements />
+          </View> */}
+          <HeaderMenu />
           <ListBudget />
           {/* <CounterContainer /> */}
         </View>
