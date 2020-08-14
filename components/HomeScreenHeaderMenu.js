@@ -31,7 +31,7 @@ const HeaderMenu = (props) => {
   console.log(`headerMenuProps: ${JSON.stringify(props, null, 2)}`);
   const [collapsed, toggleCollapsed] = React.useState(false);
   const [isLoaded, setIsLoaded] = React.useState(false);
-  const [data, setData] = React.useState({ data: 'before' });
+  const [data, setData] = React.useState({ data: 'After' });
   const navigation = useNavigation();
 
   const id = React.useRef(null);
@@ -75,26 +75,18 @@ const HeaderMenu = (props) => {
       <Collapsible collapsed={collapsed} align="center">
         <View style={styles.devConsole}>
           <Button
-            title="Go to Details"
-            onPress={() => navigation.navigate('Details')}>
-            Go To Details
-          </Button>
-          <Button title="Save Data Async" onPress={() => setObjValue(data)} />
-          <Button title="Load Data Async" onPress={() => loadData()} />
-          <Text>Data: {JSON.stringify(data, null, 2)}</Text>
-          <Button
-            title="Dynamic Bottom Sheet"
-            onPress={() => navigation.navigate('DynamicBottomSheet')}
+            style={styles.verticalSpacing}
+            title="Save Data Async"
+            onPress={() => setObjValue(data)}
           />
           <Button
-            title="Bottom Sheet"
-            onPress={() => navigation.navigate('BottomSheet')}
+            style={styles.verticalSpacing}
+            title="Load Data Async"
+            onPress={() => loadData()}
           />
-          <Button
-            title="Collapsible"
-            onPress={() => navigation.navigate('Collapsible')}
-          />
-          <Timer />
+          <Text styles={styles.verticalSpacing}>
+            Data: {JSON.stringify(data, null, 2)}
+          </Text>
         </View>
       </Collapsible>
       <AddBudgetElements />
@@ -123,6 +115,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '500',
+  },
+  verticalSpacing: {
+    marginVertical: 8,
   },
 });
 

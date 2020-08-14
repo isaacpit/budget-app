@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 
 const Timer = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isCountingDown, setIsCountingDown] = useState(true);
 
   const id = useRef(null);
   const [timeCount, setTimeCount] = useState(3);
@@ -20,19 +20,43 @@ const Timer = () => {
   useEffect(() => {
     if (timeCount === 0) {
       clear();
-      setIsLoaded(true);
+      setIsCountingDown(false);
     }
   }, [timeCount]);
 
   return (
-    <View>
-      <Text>Timer</Text>
-      <Text style={{ fontSize: 30 }}>
-        {isLoaded ? 'Loaded data' : 'Loading!'}
+    <View style={styles.topLevelContainer}>
+      <View style={styles.bordered}>
+        <Text style={styles.header}>Timer</Text>
+      </View>
+      <Text style={styles.largeText}>
+        {isCountingDown ? 'Counting down' : 'Done!'}
       </Text>
-      <Text>{timeCount}</Text>
+      <Text style={styles.p}>{timeCount}</Text>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  topLevelContainer: {
+    // justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  bordered: {
+    padding: 4,
+    borderBottomColor: '#333',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  header: {
+    fontSize: 30,
+  },
+  largeText: {
+    fontSize: 25,
+  },
+  p: {
+    fontSize: 20,
+  },
+});
 
 export default Timer;

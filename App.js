@@ -1,6 +1,6 @@
 // In App.js in a new project
 
-import React, {  } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -30,6 +30,13 @@ import CollapsibleExample from './components/collapsible/CollapseExample';
 
 import HeaderMenu from './components/HomeScreenHeaderMenu';
 
+import Timer from './components/Timer';
+
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+import { useNavigation } from '@react-navigation/native';
+
+import { DrawerActions } from '@react-navigation/native';
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -60,9 +67,39 @@ function DetailsScreen() {
 
 const Stack = createStackNavigator();
 
-const HeaderButtonRight = () => {
+const Drawer = createDrawerNavigator();
+
+const DrawerComponent = () => {
   return (
-    <Button style={{ width: 100, backgroundColor: '#aaa' }} title="Open Menu" />
+    <Drawer.Navigator>
+      <Drawer.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          // headerRight: <HeaderButtonRight />,
+          headerRight: () => <HeaderButtonRight />,
+          title: 'Home',
+        }}
+      />
+      <Drawer.Screen name="BottomSheet" component={BottomSheetExample} />
+      <Drawer.Screen name="DynamicBottomSheet" component={DynamicBottomSheet} />
+      <Drawer.Screen name="Collapsible" component={CollapsibleExample} />
+      <Drawer.Screen name="Timer" component={Timer} />
+    </Drawer.Navigator>
+  );
+};
+
+const HeaderButtonRight = () => {
+  const navigation = useNavigation();
+  return (
+    <Button
+      buttonStyle={styles.navigationButtonRight}
+      title="Open Menu"
+      onPress={() => {
+        console.log(`navigation: ${JSON.stringify(navigation, null, 2)}`);
+        navigation.dispatch(DrawerActions.openDrawer());
+      }}
+    />
   );
 };
 
@@ -70,23 +107,14 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{
-              // headerRight: <HeaderButtonRight />,
-              headerRight: () => <HeaderButtonRight />,
-            }}
-          />
+        <Stack.Navigator initialRouteName="Drawer">
+          <Stack.Screen name="Home" component={DrawerComponent} />
           <Stack.Screen name="Details" component={DetailsScreen} />
           <Stack.Screen
             name="DynamicBottomSheet"
             component={DynamicBottomSheet}
           />
           <Stack.Screen name="BudgetDetails" component={BudgetDetails} />
-          <Stack.Screen name="BottomSheet" component={BottomSheetExample} />
-          <Stack.Screen name="Collapsible" component={CollapsibleExample} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
@@ -115,6 +143,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
+  navigationButtonRight: {
+    width: 150,
+    backgroundColor: '#aaa',
+    margin: 4,
+    padding: 3,
+  }
 });
 
 export default App;
