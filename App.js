@@ -1,84 +1,40 @@
 // In App.js in a new project
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, {  } from 'react';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   Alert,
-  ScrollView,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from 'react-native-elements';
 
 import DynamicBottomSheet from './components/raw-bottom-sheet/DynamicBottomSheetExample';
 import BottomSheetExample from './components/raw-bottom-sheet/BottomSheetExample';
 
-import { connect } from 'react-redux';
 
 import { Provider } from 'react-redux';
 
 import store from './store';
 
-import budgetApp, {
-  addBudget,
-  updateBudget,
-  incrementCounter,
-  addTransactionToBudget,
-} from './redux-playground/actions';
-
 import AsyncStorage from '@react-native-community/async-storage';
-
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { Keyboard } from 'react-native';
 
-import CounterContainer from './redux-playground/countainers/CounterContainer';
-
 import BudgetDetails from './views/BudgetDetails';
 
-import AddBudgetElements from './components/AddBudget';
 import ListBudget from './components/ListBudget';
 
 import CollapsibleExample from './components/collapsible/CollapseExample';
 
-import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
-
-import Collapsible from 'react-native-collapsible';
-
-import Timer from './components/Timer';
-
 import HeaderMenu from './components/HomeScreenHeaderMenu';
 
-const setObjValue = async (value) => {
-  try {
-    const jsonValue = JSON.stringify(value);
-    await AsyncStorage.setItem('@data_key', jsonValue);
-  } catch (e) {
-    // save error
-    Alert.alert(e);
-  }
-
-  console.log('Done.');
-};
 
 // TODO fix this, no longer hooked up
-const getData = async () => {
-  try {
-    const jsonValue = await AsyncStorage.getItem('@data_key');
-    console.log('jsonValue: ' + jsonValue);
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
-  } catch (e) {
-    // error reading value
-    Alert.alert(e);
-  }
-};
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -174,7 +130,7 @@ class HomeScreen extends React.Component {
   }
 }
 
-function DetailsScreen({ navigation }) {
+function DetailsScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Details Screen</Text>
