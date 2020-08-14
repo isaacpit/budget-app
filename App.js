@@ -16,12 +16,9 @@ import { Button } from 'react-native-elements';
 import DynamicBottomSheet from './components/raw-bottom-sheet/DynamicBottomSheetExample';
 import BottomSheetExample from './components/raw-bottom-sheet/BottomSheetExample';
 
-
 import { Provider } from 'react-redux';
 
 import store from './store';
-
-import AsyncStorage from '@react-native-community/async-storage';
 
 import { Keyboard } from 'react-native';
 
@@ -34,8 +31,6 @@ import CollapsibleExample from './components/collapsible/CollapseExample';
 import HeaderMenu from './components/HomeScreenHeaderMenu';
 
 
-// TODO fix this, no longer hooked up
-
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -43,87 +38,12 @@ class HomeScreen extends React.Component {
     console.log(JSON.stringify(props, null, 2));
   }
 
-  // componentDidMount() {
-  //   console.log('Homescreen mounted');
-  //   this.intervalId = setInterval(() => {
-  //     console.log('ran!' + this.state.timeCount);
-  //     this.setState((prevState) => {
-  //       return {
-  //         timeCount: prevState.timeCount - 1,
-  //       };
-  //     });
-  //   }, 1000);
-  // }
-
-  // componentDidUpdate() {
-  //   console.log('looking at interval!');
-  //   console.log(
-  //     `\tstate.timeCount: ${this.state.timeCount} state.isLoaded: ${this.state.isLoaded}`,
-  //   );
-  //   if (this.state.timeCount < 1 && !this.state.isLoaded) {
-  //     console.log('clearing interval!');
-  //     console.log(
-  //       `\tstate.timeCount: ${this.state.timeCount} state.isLoaded: ${this.state.isLoaded}`,
-  //     );
-  //     clearInterval(this.intervalId);
-  //     // this.getData();
-  //   }
-  // }
-
-  // componentWillUnMount() {
-  //   clearInterval(this.intervalId);
-  // }
-
   render() {
     return (
-      // wrapped so that numeric keypad will go away
-      // <ScrollView contentInsetAdjustmentBehavior="automatic">
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.topLevelContainer}>
-          {/* <Text>Home Screen</Text> */}
-          {/* <View>
-            <TouchableOpacity onPress={this.toggleExpanded}>
-              <View style={styles.header}>
-                <Text style={styles.headerText}>Menu</Text>
-              </View>
-            </TouchableOpacity>
-            <Collapsible collapsed={this.state.collapsed} align="center">
-              <View style={styles.devConsole}>
-                <Button
-                  title="Go to Details"
-                  onPress={() => this.props.navigation.navigate('Details')}>
-                  Go To Details
-                </Button>
-                <Button
-                  title="Save Data"
-                  onPress={() => this.setObjValue({ data: 'Saved data' })}
-                />
-                <Text style={{ fontSize: 30 }}>
-                  {this.state.isLoaded ? 'Loaded data' : 'Loading!'}
-                </Text>
-                {this.state.isLoaded ? <Text>{this.state.data}</Text> : null}
-                <Text>{this.state.timeCount}</Text>
-                <Button
-                  title="Dynamic Bottom Sheet"
-                  onPress={() =>
-                    this.props.navigation.navigate('DynamicBottomSheet')
-                  }
-                />
-                <Button
-                  title="Bottom Sheet"
-                  onPress={() => this.props.navigation.navigate('BottomSheet')}
-                />
-                <Button
-                  title="Collapsible"
-                  onPress={() => this.props.navigation.navigate('Collapsible')}
-                />
-              </View>
-            </Collapsible>
-            <AddBudgetElements />
-          </View> */}
           <HeaderMenu />
           <ListBudget />
-          {/* <CounterContainer /> */}
         </View>
       </TouchableWithoutFeedback>
     );
