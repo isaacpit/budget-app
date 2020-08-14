@@ -7,6 +7,7 @@ import {
   StyleSheet,
   FlatList,
   Dimensions,
+  SectionList,
 } from 'react-native';
 
 import { Button, ListItem } from 'react-native-elements';
@@ -25,16 +26,19 @@ import { NavigationContainer } from '@react-navigation/native';
 const window = Dimensions.get('window');
 const screen = Dimensions.get('screen');
 
-const ListBudgetHeader = () => {
+const ListBudgetHeader = (props) => {
+  console.log(`ListBudgetHeader: ${JSON.stringify(props, null, 2)}`);
   return (
     <View style={styles.listBudgetHeaderContainer}>
-      <StyledHeader>Budgets</StyledHeader>
+      <StyledHeader>{props.title}</StyledHeader>
     </View>
   );
 };
 
 const ListBudget = ({ budgets }) => {
   const [dimensions, setDimensions] = useState({ window, screen });
+
+  console.log(`budgets: ${JSON.stringify(budgets, null, 2)}`);
 
   const onChange = ({ window, screen }) => {
     setDimensions({ window, screen });
@@ -49,11 +53,12 @@ const ListBudget = ({ budgets }) => {
 
   return (
     // <View styles={styles.containerView}>
-    <FlatList
+    <SectionList
       // contentContainerStyle={styles.flatListContainer}
-      ListHeaderComponent={ListBudgetHeader}
+      // ListHeaderComponent={ListBudgetHeader}
       style={styles.flatListContainer}
-      data={budgets}
+      sections={budgets}
+      stickySectionHeadersEnabled={false}
       keyExtractor={(item, index) => {
         return String(index);
       }}
@@ -81,7 +86,12 @@ const ListBudget = ({ budgets }) => {
         //     chevron
         //     // checkmark={true}
         //   />
+        console.log(`renderItem: ${JSON.stringify(item, null, 2)}`);
         return <BudgetItem {...item} onPressDetails />;
+      }}
+      renderSectionHeader={({ section: { title } }) => {
+        console.log(`titleSectionHeader: ${title}`);
+        return <ListBudgetHeader title={title} />;
       }}
     />
     // </View>
@@ -96,9 +106,18 @@ function extractBudgetEntriesIntoArray(dataObj) {
     console.log(`${key}: ${value}`);
     result.push(value);
   }
-
-  console.log(`result: ${JSON.stringify(result, null, 2)}`);
-  return result;
+  const final_result = [
+    {
+      data: result,
+      title: 'Budgets!',
+    },
+    {
+      data: result,
+      title: 'Budgets Again!',
+    },
+  ];
+  console.log(`final_result: ${JSON.stringify(final_result, null, 2)}`);
+  return final_result;
 }
 
 const mapStateToProps = (state, ownProps) => ({
@@ -109,14 +128,15 @@ const styles = StyleSheet.create({
   flatListContainer: {
     // flex: 1,
     // justifyContent: 'center',
-    marginHorizontal: 4,
+    // marginHorizontal: 4,
+    // paddingBottom: 10,
 
     // flexGrow: 0,
     // flexShrink: 0,
     // maxHeight: 300,
     // maxHeight: 400,
     backgroundColor: '#ddd',
-    padding: 4,
+    paddingHorizontal: 4,
   },
   listItemContainer: {
     // alignSelf: 'stretch',
@@ -135,7 +155,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 5,
   },
-  listBudgetHeaderContainer: {},
+  listBudgetHeaderContainer: {
+    paddingVertical: 15,
+  },
   headerText: {
     fontSize: 50,
     fontWeight: 'bold',

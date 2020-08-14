@@ -138,7 +138,7 @@ class HomeScreen extends React.Component {
       // wrapped so that numeric keypad will go away
       // <ScrollView contentInsetAdjustmentBehavior="automatic">
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <SafeAreaView style={styles.topLevelContainer}>
+        <View style={styles.topLevelContainer}>
           {/* <Text>Home Screen</Text> */}
           <TouchableOpacity onPress={this.toggleExpanded}>
             <View style={styles.header}>
@@ -180,8 +180,7 @@ class HomeScreen extends React.Component {
           <AddBudgetElements />
           <ListBudget />
           {/* <CounterContainer /> */}
-        </SafeAreaView>
-      {/* </ScrollView> */}
+        </View>
       </TouchableWithoutFeedback>
     );
   }
