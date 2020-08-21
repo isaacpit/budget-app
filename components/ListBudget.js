@@ -52,40 +52,14 @@ const ListBudget = ({ budgets }) => {
   });
 
   return (
-    // <View styles={styles.containerView}>
     <SectionList
-      // contentContainerStyle={styles.flatListContainer}
-      // ListHeaderComponent={ListBudgetHeader}
       style={styles.flatListContainer}
       sections={budgets}
       stickySectionHeadersEnabled={false}
       keyExtractor={(item, index) => {
         return String(index);
       }}
-      // extraData={budgets}
       renderItem={(item) => {
-        // console.log(`budget: ${JSON.stringify(item, null, 2)}`);
-        // return (
-        //   <ListItem
-        //     // containerStyle={{ width: dimensions.window.width-10, margin: 4}}
-        //     // style={styles.listItem}
-        //     titleStyle={text_styles.largeText}
-        //     title={item.item.budgetName}
-        //     subtitle={
-        //       <Progress.Bar
-        //         animated
-        //         borderWidth={1}
-        //         borderColor={'#ccc'}
-        //         height={20}
-        //         progress={0.5}
-        //       />
-        //     }
-        //     rightTitle={'$' + item.item.budgetMax}
-        //     rightTitleStyle={text_styles.baseText}
-        //     bottomDivider
-        //     chevron
-        //     // checkmark={true}
-        //   />
         console.log(`renderItem: ${JSON.stringify(item, null, 2)}`);
         return <BudgetItem {...item} onPressDetails />;
       }}

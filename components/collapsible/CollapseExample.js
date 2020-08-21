@@ -62,7 +62,7 @@ export default class App extends Component {
     this.setState({ collapsed: !this.state.collapsed });
   };
 
-  setSections = sections => {
+  setSections = (sections) => {
     this.setState({
       activeSections: sections.includes(undefined) ? [] : sections,
     });
@@ -73,8 +73,7 @@ export default class App extends Component {
       <Animatable.View
         duration={400}
         style={[styles.header, isActive ? styles.active : styles.inactive]}
-        transition="backgroundColor"
-      >
+        transition="backgroundColor">
         <Text style={styles.headerText}>{section.title}</Text>
       </Animatable.View>
     );
@@ -85,8 +84,7 @@ export default class App extends Component {
       <Animatable.View
         duration={400}
         style={[styles.content, isActive ? styles.active : styles.inactive]}
-        transition="backgroundColor"
-      >
+        transition="backgroundColor">
         <Animatable.Text animation={isActive ? 'bounceIn' : undefined}>
           {section.content}
         </Animatable.Text>
@@ -106,25 +104,23 @@ export default class App extends Component {
             <Text style={styles.multipleToggle__title}>Multiple Select?</Text>
             <Switch
               value={multipleSelect}
-              onValueChange={a => this.setState({ multipleSelect: a })}
+              onValueChange={(a) => this.setState({ multipleSelect: a })}
             />
           </View>
 
           <View style={styles.selectors}>
             <Text style={styles.selectTitle}>Select:</Text>
 
-            {SELECTORS.map(selector => (
+            {SELECTORS.map((selector) => (
               <TouchableOpacity
                 key={selector.title}
-                onPress={() => this.setSections([selector.value])}
-              >
+                onPress={() => this.setSections([selector.value])}>
                 <View style={styles.selector}>
                   <Text
                     style={
                       activeSections.includes(selector.value) &&
                       styles.activeSelector
-                    }
-                  >
+                    }>
                     {selector.title}
                   </Text>
                 </View>
