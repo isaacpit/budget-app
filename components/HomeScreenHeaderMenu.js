@@ -23,12 +23,9 @@ const setObjValue = async (value) => {
     // save error
     Alert.alert(e);
   }
-
-  console.log('Done.');
 };
 
 const HeaderMenu = (props) => {
-  console.log(`headerMenuProps: ${JSON.stringify(props, null, 2)}`);
   const [collapsed, toggleCollapsed] = React.useState(false);
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [data, setData] = React.useState({ data: 'After' });
@@ -56,10 +53,8 @@ const HeaderMenu = (props) => {
 
   const loadData = async () => {
     const jsonValue = await AsyncStorage.getItem('@data_key');
-    console.log('jsonValue: ' + jsonValue);
     const result_data = jsonValue != null ? JSON.parse(jsonValue) : null;
     setData(result_data);
-    console.log('data: ' + JSON.stringify(data, null, 2));
   };
 
   return (

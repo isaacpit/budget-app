@@ -27,7 +27,6 @@ const window = Dimensions.get('window');
 const screen = Dimensions.get('screen');
 
 const ListBudgetHeader = (props) => {
-  console.log(`ListBudgetHeader: ${JSON.stringify(props, null, 2)}`);
   return (
     <View style={styles.listBudgetHeaderContainer}>
       <StyledHeader>{props.title}</StyledHeader>
@@ -37,8 +36,6 @@ const ListBudgetHeader = (props) => {
 
 const ListBudget = ({ budgets }) => {
   const [dimensions, setDimensions] = useState({ window, screen });
-
-  console.log(`budgets: ${JSON.stringify(budgets, null, 2)}`);
 
   const onChange = ({ window, screen }) => {
     setDimensions({ window, screen });
@@ -60,11 +57,9 @@ const ListBudget = ({ budgets }) => {
         return String(index);
       }}
       renderItem={(item) => {
-        console.log(`renderItem: ${JSON.stringify(item, null, 2)}`);
         return <BudgetItem {...item} onPressDetails />;
       }}
       renderSectionHeader={({ section: { title } }) => {
-        console.log(`titleSectionHeader: ${title}`);
         return <ListBudgetHeader title={title} />;
       }}
     />
@@ -73,11 +68,9 @@ const ListBudget = ({ budgets }) => {
 };
 
 function extractBudgetEntriesIntoArray(dataObj) {
-  console.log(dataObj);
 
   const result = [];
   for (const [key, value] of Object.entries(dataObj)) {
-    console.log(`${key}: ${value}`);
     result.push(value);
   }
   const final_result = [
@@ -90,7 +83,6 @@ function extractBudgetEntriesIntoArray(dataObj) {
       title: 'Budgets Again!',
     },
   ];
-  console.log(`final_result: ${JSON.stringify(final_result, null, 2)}`);
   return final_result;
 }
 

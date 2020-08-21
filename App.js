@@ -41,8 +41,7 @@ import { DrawerActions } from '@react-navigation/native';
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
-    console.log('Homescreen props: ');
-    console.log(JSON.stringify(props, null, 2));
+
   }
 
   render() {
@@ -96,7 +95,6 @@ const HeaderButtonRight = () => {
       buttonStyle={styles.navigationButtonRight}
       title="Open Menu"
       onPress={() => {
-        console.log(`navigation: ${JSON.stringify(navigation, null, 2)}`);
         navigation.dispatch(DrawerActions.openDrawer());
       }}
     />

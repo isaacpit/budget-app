@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 // presentational component
 
 function Counter({ test_counter, budgets, incrementCounter }) {
-  console.log('COUNTER COMPONENT: ' + JSON.stringify(budgets, null, 2));
   return (
     <View
       style={{

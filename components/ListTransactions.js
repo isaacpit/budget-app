@@ -15,7 +15,6 @@ const getTransactionTotal = (transactions) => {
 };
 
 const ListTransaction = ({ transactions, budgetId }) => {
-  console.log(`ListTransactions: ${JSON.stringify(transactions, null, 2)}`);
   return (
     <View>
       <Text>Transactions</Text>
@@ -28,7 +27,7 @@ const ListTransaction = ({ transactions, budgetId }) => {
           </View>
         );
       })}
-      <View style={styles.line}></View>
+      <View style={styles.line} />
       <View style={styles.rowContainer}>
         <Text>Total: </Text>
         <Text>{getTransactionTotal(transactions)}</Text>
@@ -50,16 +49,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(
-    `ListTransation mapStateToProps state: ${JSON.stringify(state, null, 2)}`,
-  );
-  console.log(
-    `ListTransation mapStateToProps ownProps: ${JSON.stringify(
-      ownProps,
-      null,
-      2,
-    )}`,
-  );
   let transactionsData = getTransactionsByBudgetId(state, ownProps.budgetId);
   return {
     transactions: transactionsData,
@@ -67,5 +56,3 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 export default connect(mapStateToProps)(ListTransaction);
-
-

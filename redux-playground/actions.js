@@ -70,10 +70,6 @@ const initialState = {
 
 // Reducer
 const budgetApp = (state = initialState, action) => {
-  console.log('previous state: ');
-  console.log(JSON.stringify(state, null, 2));
-  console.log(`dispatching action type: ${action.type}`);
-  console.log(`full action: ${JSON.stringify(action, null, 2)}`);
   switch (action.type) {
     case ADD_BUDGET:
       return Object.assign({}, state, {
@@ -88,13 +84,6 @@ const budgetApp = (state = initialState, action) => {
         },
       });
     case UPDATE_BUDGET_VALUES:
-      console.log(
-        `Previous associated transactions: ${JSON.stringify(
-          state.mapBudgetIdToData[action.id],
-          null,
-          2,
-        )}`,
-      );
       // update new state without mutating old state
       return Object.assign({}, state, {
         mapBudgetIdToData: {
@@ -150,8 +139,8 @@ export function getTransactionsByBudgetId(state, budgetId) {
     state.mapBudgetIdToData[budgetId].transactionIds;
   let transactionsData = new Array(listAssociatedTransactionsIds.length);
   for (let i = 0; i < listAssociatedTransactionsIds.length; ++i) {
-    const currTransactionData = state.mapTransactionIdToData[listAssociatedTransactionsIds[i]];
-    console.log(`${i} => ${JSON.stringify(currTransactionData, null, 2)}`);
+    const currTransactionData =
+      state.mapTransactionIdToData[listAssociatedTransactionsIds[i]];
     transactionsData[i] = currTransactionData;
   }
   return transactionsData;

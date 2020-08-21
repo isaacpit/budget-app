@@ -21,16 +21,6 @@ const BudgetDetails = (props) => {
     props.route.params.item.budgetMax.toString(),
   );
   const bottomSheetRef = useRef(null);
-  console.log(
-    `Budget Details Screen props: ${JSON.stringify(props, null, 2)} `,
-  );
-  console.log(
-    `Budget Details Screen route.params: ${JSON.stringify(
-      props.route.params,
-      null,
-      2,
-    )} `,
-  );
   return (
     <View>
       <ButtonElements
@@ -47,16 +37,6 @@ const BudgetDetails = (props) => {
         customStyles={bottomSheetObj}>
         <View style={styles.listContainer}>
           <Text style={styles.listTitle}>Create</Text>
-          {/* {data.lists.map((list) => (
-            <TouchableOpacity
-              key={list.icon}
-              style={styles.listButton}
-              onPress={() => this.Standard.close()}>
-              <MDIcon name={list.icon} style={styles.listIcon} />
-              <Text style={styles.listLabel}>{list.label}</Text>
-            </TouchableOpacity>
-          ))} */}
-          {/* TODO: turn this into a component of it's own */}
           <View style={styles.rowContainer}>
             <TextInput
               style={styles.textInput}
@@ -88,16 +68,8 @@ const BudgetDetails = (props) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  // console.log(`BudgetDetails`)
   return {
     updateBudget: (id, name, max) => {
-      console.log(
-        `updateBudget called with ownProps: ${JSON.stringify(
-          ownProps,
-          null,
-          2,
-        )}`,
-      );
       dispatch(updateBudget(id, name, max));
     },
   };
