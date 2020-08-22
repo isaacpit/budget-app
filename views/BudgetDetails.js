@@ -104,6 +104,7 @@ const BudgetDetails = ({
                   date={transactionDate}
                   onDateChange={setTransactionDate}
                   mode={'date'}
+                  style={{ height: 150 }}
                 />
 
                 <View style={{ ...styles.rowContainer, width: 250, margin: 8, }}>
@@ -117,16 +118,28 @@ const BudgetDetails = ({
                   <TouchableHighlight
                     style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
                     onPress={() => {
-                      const budgetId = route.params.item.budgetId;
-                      const txName = transactionName;
-                      const txAmount = transactionAmount;
-                      const txDate = transactionDate;
-                      const txId = uuidv4();
-                      console.log(
-                        `budgetId: ${budgetId}\ntxId: ${txId}\ntxName: ${txName}\ntxAmount: ${txAmount}\ntxDate: ${txDate}`,
-                      );
-                      addTransaction(budgetId, txId, txName, txAmount, txDate);
-                      setModalVisible(!modalVisible);
+                      try {
+                        const budgetId = route.params.item.budgetId;
+                        const txName = transactionName;
+                        const txAmount = parseFloat(transactionAmount);
+                        const txDate = transactionDate;
+                        const txId = uuidv4();
+                        console.log(
+                          `budgetId: ${budgetId}\ntxId: ${txId}\ntxName: ${txName}\ntxAmount: ${txAmount}\ntxDate: ${txDate}`,
+                        );
+                        addTransaction(
+                          budgetId,
+                          txId,
+                          txName,
+                          txAmount,
+                          txDate,
+                        );
+                        setModalVisible(!modalVisible);
+                      } catch (err) {
+                        console.log(
+                          'error creating transaction: ' + err.toString(),
+                        );
+                      }
                     }}>
                     <Text style={styles.textStyle}>Save</Text>
                   </TouchableHighlight>

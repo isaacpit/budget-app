@@ -16,7 +16,6 @@ const store = createStore(budgetApp, composeEnhancer(applyMiddleware(thunk)));
 
 export default store;
 
-
 // subscribe store to do something on every action
 // const unsubscribe = store.subscribe(() =>
 //   console.log(JSON.stringify(store.getState(), null, 2)),

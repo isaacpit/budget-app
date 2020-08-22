@@ -7,6 +7,7 @@ target 'BudgetDashboard' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
+  
 
   target 'BudgetDashboardTests' do
     inherit! :complete

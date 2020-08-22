@@ -38,6 +38,8 @@ import { useNavigation } from '@react-navigation/native';
 
 import { DrawerActions } from '@react-navigation/native';
 
+import DateView from './views/DatePickerView';
+
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -84,6 +86,7 @@ const DrawerComponent = () => {
       <Drawer.Screen name="DynamicBottomSheet" component={DynamicBottomSheet} />
       <Drawer.Screen name="Collapsible" component={CollapsibleExample} />
       <Drawer.Screen name="Timer" component={Timer} />
+      <Drawer.Screen name="Date" component={DateView} />
     </Drawer.Navigator>
   );
 };
