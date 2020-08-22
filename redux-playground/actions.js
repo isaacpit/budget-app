@@ -3,6 +3,7 @@ export const ADD_BUDGET = 'ADD_BUDGET';
 export const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
 export const UPDATE_BUDGET_VALUES = 'UPDATE_BUDGET';
 export const ADD_TRANSACTION = 'ADD_TRANSACTION';
+export const UPDATE_TRANSACTION = 'UPDATE_TRANSACTION_VALUES';
 // export const ADD_TRANSACTION = 'ADD_TRANSACTION';
 
 // action creators
@@ -33,6 +34,19 @@ export const addTransactionToBudget = (
 ) => ({
   type: ADD_TRANSACTION,
   budgetId: budgetId,
+  transactionId: transactionId,
+  transactionName: transactionName,
+  transactionAmount: transactionAmount,
+  transactionDate: transactionDate,
+});
+
+export const updateTransaction = (
+  transactionId,
+  transactionName,
+  transactionAmount,
+  transactionDate = new Date(),
+) => ({
+  type: UPDATE_TRANSACTION,
   transactionId: transactionId,
   transactionName: transactionName,
   transactionAmount: transactionAmount,
@@ -101,7 +115,6 @@ const budgetApp = (state = initialState, action) => {
       });
     case ADD_TRANSACTION:
       return Object.assign({}, state, {
-        ...state,
         // add transaction id to associated budget's list of transactions ids
         mapBudgetIdToData: {
           ...state.mapBudgetIdToData,
@@ -113,6 +126,20 @@ const budgetApp = (state = initialState, action) => {
             ],
           },
         },
+        // add transaction data
+        mapTransactionIdToData: {
+          ...state.mapTransactionIdToData,
+          [action.transactionId]: {
+            transactionId: action.transactionId,
+            transactionName: action.transactionName,
+            transactionAmount: action.transactionAmount,
+            transactionDate: action.transactionDate,
+          },
+        },
+      });
+    case UPDATE_TRANSACTION:
+      return Object.assign({}, state, {
+        // set transaction data
         mapTransactionIdToData: {
           ...state.mapTransactionIdToData,
           [action.transactionId]: {

@@ -19,9 +19,8 @@ import { getTransactionsByBudgetId } from '../redux-playground/actions';
 const getProgress = (transactions, budgetItem) => {
   let transactionTotal = 0;
   for (let i = 0; i < transactions.length; ++i) {
-    transactionTotal += transactions[i].transactionAmount;
+    transactionTotal += parseFloat(transactions[i].transactionAmount);
   }
-
   return transactionTotal / budgetItem.budgetMax;
 };
 

@@ -68,7 +68,6 @@ const ListBudget = ({ budgets }) => {
 };
 
 function extractBudgetEntriesIntoArray(dataObj) {
-
   const result = [];
   for (const [key, value] of Object.entries(dataObj)) {
     result.push(value);
@@ -77,10 +76,6 @@ function extractBudgetEntriesIntoArray(dataObj) {
     {
       data: result,
       title: 'Budgets!',
-    },
-    {
-      data: result,
-      title: 'Budgets Again!',
     },
   ];
   return final_result;

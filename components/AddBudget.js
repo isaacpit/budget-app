@@ -98,8 +98,8 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
             checkWhetherEnableButton();
             // setIsEdited is set upon validation
           }}
-          keyboardType="number-pad"
-          placeholder="20"
+          keyboardType="decimal-pad"
+          placeholder="20.00"
           maxLength={10}
           // placeholder={'Max'}
         />

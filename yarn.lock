@@ -5082,6 +5082,11 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "^1.2.5"
 
+moment@^2.22.1:
+  version "2.27.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.27.0.tgz#8bff4e3e26a236220dfe3e36de756b6ebaa0105d"
+  integrity sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ==
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -5758,6 +5763,13 @@ react-native-collapsible@^1.5.3:
   integrity sha512-Ciuy3yF8wcHeLxXFtx9vxoyrq8l+9EJqLM/ADw54gVwzTQc1/e2ojhQbVFPlxhDA+Pba2qezkaKfv5ifxg8hoQ==
   dependencies:
     prop-types "^15.6.2"
+
+react-native-date-picker@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-3.1.0.tgz#8821444b971680352e3b3e75082c8b9539d5048a"
+  integrity sha512-tKO6t/oumnfurrbuDNmAG7NdCH2jwrcYilNEt0vWqhrOTKESxDbui1l4XXQU9HRt8598MA3dB76tuxrG0UV8OA==
+  dependencies:
+    moment "^2.22.1"
 
 react-native-elements@^2.2.0:
   version "2.2.0"
