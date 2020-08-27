@@ -24,6 +24,13 @@ import { connect } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import HeaderMenu from './HomeScreenHeaderMenu';
 
+import { SwipeListView } from 'react-native-swipe-list-view';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { deleteBudget } from '../redux-playground/actions';
+
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { abs } from 'react-native-reanimated';
+
 const window = Dimensions.get('window');
 const screen = Dimensions.get('screen');
 
@@ -35,7 +42,10 @@ const ListBudgetHeader = (props) => {
   );
 };
 
-const ListBudget = ({ budgets, headerMenu }) => {
+const ROW_RIGHT_OPEN_VALUE = -75;
+const ROW_RIGHT_ACTIVATION_VALUE = -100;
+
+const ListBudget = ({ budgets, headerMenu, deleteRow }) => {
   const [dimensions, setDimensions] = useState({ window, screen });
 
   const onChange = ({ window, screen }) => {
@@ -50,24 +60,63 @@ const ListBudget = ({ budgets, headerMenu }) => {
   });
 
   return (
-    <SectionList
+    <SwipeListView
+      useSectionList
       style={styles.flatListContainer}
       sections={budgets}
-      stickySectionHeadersEnabled={false}
-      ListHeaderComponent={headerMenu != null ? headerMenu : null}
       keyExtractor={(item, index) => {
         return String(index);
       }}
-      renderItem={(item) => {
+      renderItem={(item, rowMap) => {
+        console.log(`budgetItem: ${JSON.stringify(item, null, 2)}`);
         return <BudgetItem {...item} onPressDetails />;
+      }}
+      stickySectionHeadersEnabled={false}
+      ListHeaderComponent={headerMenu != null ? headerMenu : null}
+      renderHiddenItem={(data, rowMap) => {
+        return (
+          <View style={styles.rowBack}>
+            <TouchableOpacity
+              {...data.item}
+              onPress={() => {
+                onPressDeleteRow(data, rowMap, deleteRow);
+              }}
+              style={styles.buttonDelete}>
+              <Text style={styles.titleStyle}>Delete</Text>
+              <Icon name="delete" size={40} />
+            </TouchableOpacity>
+          </View>
+        );
       }}
       renderSectionHeader={({ section: { title } }) => {
         return <ListBudgetHeader title={title} />;
       }}
+      // leftOpenValue={75}
+      // disableRightSwipe={true}
+      // leftOpenValue={-75}
+      rightOpenValue={ROW_RIGHT_OPEN_VALUE}
+      rightActivationValue={ROW_RIGHT_ACTIVATION_VALUE}
+      stopRightSwipe={-75}
+      // leftActivationValue={-100}
+      previewRowKey={'0'}
+      previewOpenValue={-40}
+      previewOpenDelay={3000}
+      friction={10}
+      tension={100}
+      restSpeedThreshold={1}
+      restDisplacementThreshold={0.025}
+      directionalDistanceChangeThreshold={1}
+      // onRowDidOpen={onRowDidOpen}
     />
-    // </View>
   );
 };
+
+function onPressDeleteRow(data, rowMap, deleteRow) {
+  if (rowMap[data.index]) {
+    rowMap[data.index].closeRow();
+  }
+  deleteRow(data.item.budgetId);
+}
 
 function extractBudgetEntriesIntoArray(dataObj) {
   const result = [];
@@ -85,6 +134,12 @@ function extractBudgetEntriesIntoArray(dataObj) {
 
 const mapStateToProps = (state, ownProps) => ({
   budgets: extractBudgetEntriesIntoArray(state.mapBudgetIdToData),
+});
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  deleteRow: (budgetId) => {
+    dispatch(deleteBudget(budgetId));
+  },
 });
 
 const styles = StyleSheet.create({
@@ -125,7 +180,24 @@ const styles = StyleSheet.create({
     fontSize: 50,
     fontWeight: 'bold',
   },
+  rowBack: {
+    alignItems: 'stretch',
+    backgroundColor: '#DDD',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingLeft: 15,
+  },
+  buttonDelete: {
+    backgroundColor: '#f77',
+    // alignSelf: 'stretch',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: Math.abs(ROW_RIGHT_OPEN_VALUE),
+    // height: 'auto',
+  },
 });
 
-export default connect(mapStateToProps)(ListBudget);
+export default connect(mapStateToProps, mapDispatchToProps)(ListBudget);
 // export default ListBudget;
