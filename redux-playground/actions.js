@@ -4,6 +4,8 @@ export const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
 export const UPDATE_BUDGET_VALUES = 'UPDATE_BUDGET';
 export const ADD_TRANSACTION = 'ADD_TRANSACTION';
 export const UPDATE_TRANSACTION = 'UPDATE_TRANSACTION_VALUES';
+export const DELETE_BUDGET = 'DELETE_BUDGET';
+export const DELETE_TRANSACTION = 'DELETE_TRANSACTION';
 // export const ADD_TRANSACTION = 'ADD_TRANSACTION';
 
 // action creators
@@ -51,6 +53,17 @@ export const updateTransaction = (
   transactionName: transactionName,
   transactionAmount: transactionAmount,
   transactionDate: transactionDate,
+});
+
+export const deleteBudget = (budgetId) => ({
+  type: DELETE_BUDGET,
+  budgetId: budgetId,
+});
+
+export const deleteTransaction = (budgetId, transactionId) => ({
+  type: DELETE_TRANSACTION,
+  budgetId: budgetId,
+  transactionId: transactionId,
 });
 // separate file
 
@@ -151,6 +164,61 @@ const budgetApp = (state = initialState, action) => {
         },
       });
     // delete
+    case DELETE_BUDGET:
+      // deletes a budget and all associated transactions
+      const budgetIdToDelete = action.budgetId;
+      console.log(`Deleting budgetId: ${budgetIdToDelete}`);
+      let transactionsIdsToDelete = state.mapBudgetIdToData[budgetIdToDelete].transactionIds;
+      console.log(
+        `transactionsToDelete: ${JSON.stringify(
+          transactionsIdsToDelete,
+          null,
+          2,
+        )}`,
+      );
+      let newState = Object.assign({}, state);
+      delete newState.mapBudgetIdToData[action.budgetId];
+      for (let j = 0; j < transactionsIdsToDelete.length; ++j) {
+        delete newState.mapTransactionIdToData[transactionsIdsToDelete[j]];
+      }
+      return newState;
+    case DELETE_TRANSACTION:
+      const transactionIdToDelete = action.transactionId;
+      const associatedBudgetId = action.budgetId;
+      const newTransactionList = state.mapBudgetIdToData[
+        associatedBudgetId
+      ].transactionIds.filter((txId) => {
+        console.log(
+          `txId: ${transactionIdToDelete} ${txId} ${
+            parseInt(txId) !== transactionIdToDelete
+          }
+          ${typeof txId} ${typeof transactionIdToDelete}`,
+        );
+        // should this be !== ? 
+        return txId != transactionIdToDelete;
+      });
+      console.log(
+        `Deleting transactionId: ${transactionIdToDelete} budgetId: ${associatedBudgetId}`,
+      );
+      console.log(
+        `oldTxList: ${state.mapBudgetIdToData[associatedBudgetId].transactionIds} newTxList: ${newTransactionList}`,
+      );
+      // update budget's list of transactions
+      let updatedState = Object.assign({}, state, {
+        ...state,
+        mapBudgetIdToData: {
+          ...state.mapBudgetIdToData,
+          [associatedBudgetId]: {
+            ...state.mapBudgetIdToData[associatedBudgetId],
+            transactionIds: state.mapBudgetIdToData[
+              associatedBudgetId
+            ].transactionIds.filter((txId) => txId != transactionIdToDelete),
+          },
+        },
+      });
+      // delete transaction data
+      delete updatedState.mapTransactionIdToData[transactionIdToDelete];
+      return updatedState;
     case INCREMENT_COUNTER:
       return Object.assign({}, state, {
         test_counter: state.test_counter + 1,

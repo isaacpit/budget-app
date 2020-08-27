@@ -39,19 +39,27 @@ import { useNavigation } from '@react-navigation/native';
 import { DrawerActions } from '@react-navigation/native';
 
 import DateView from './views/DatePickerView';
+import { Header } from 'react-native/Libraries/NewAppScreen';
+
+import RNSwipeable from './views/ReactNativeSwipeable';
+
+import RNSwipeableExample from './views/ReactNativeSwipeableExample';
+
+import RNSwipeableListExample from './views/ReactNativeSwipeableList';
+
+import AllRNSwipeableListExample from './views/react-native-swipeable-list-view/example';
 
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
-
   }
 
   render() {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.topLevelContainer}>
-          <HeaderMenu />
-          <ListBudget />
+          {/* <HeaderMenu /> */}
+          <ListBudget headerMenu={<HeaderMenu />} />
         </View>
       </TouchableWithoutFeedback>
     );
@@ -87,6 +95,16 @@ const DrawerComponent = () => {
       <Drawer.Screen name="Collapsible" component={CollapsibleExample} />
       <Drawer.Screen name="Timer" component={Timer} />
       <Drawer.Screen name="Date" component={DateView} />
+      <Drawer.Screen name="RNSwipeable" component={RNSwipeable} />
+      <Drawer.Screen name="RNSwipeableExample" component={RNSwipeableExample} />
+      <Drawer.Screen
+        name="RNSwipeableListExample"
+        component={RNSwipeableListExample}
+      />
+      <Drawer.Screen
+        name="AllRNSwipeableListExample"
+        component={AllRNSwipeableListExample}
+      />
     </Drawer.Navigator>
   );
 };

@@ -5,6 +5,8 @@ import thunk from 'redux-thunk';
 import budgetApp, {
   addBudget,
   addTransactionToBudget,
+  deleteBudget,
+  deleteTransaction,
 } from './redux-playground/actions';
 
 import 'react-native-get-random-values';
@@ -21,19 +23,30 @@ export default store;
 //   console.log(JSON.stringify(store.getState(), null, 2)),
 // );
 
-const some_id = uuidv4();
+const nBudgets = 4;
+const arrBudgetIds = Array(nBudgets);
 
-const nBudgets = 10;
-const arr_ids = Array(nBudgets);
+let mapBudgetIdsToTransactionIds = {};
 
-const fake_id = 44;
-store.dispatch(addBudget(some_id, 'some_name', 100));
-
-store.dispatch(
-  addTransactionToBudget('0', '46', 'Added Transaction', 3, new Date()),
-);
-
+// add some budgets
 for (let i = 0; i < nBudgets; ++i) {
-  arr_ids[i] = uuidv4();
-  store.dispatch(addBudget(arr_ids[i], 'some_name', i + 1));
+  arrBudgetIds[i] = uuidv4();
+  mapBudgetIdsToTransactionIds[arrBudgetIds[i]] = [];
+  store.dispatch(addBudget(arrBudgetIds[i], 'Budget ' + (i + 1), (i + 1) * 20));
+  for (let j = 0; j < i + 1; ++j) {
+    const txId = uuidv4();
+    mapBudgetIdsToTransactionIds[arrBudgetIds[i]] = [
+      ...mapBudgetIdsToTransactionIds[arrBudgetIds[i]],
+      txId,
+    ];
+    store.dispatch(
+      addTransactionToBudget(
+        arrBudgetIds[i],
+        txId,
+        'Transaction ' + j,
+        (j + 1) * 10,
+        new Date(),
+      ),
+    );
+  }
 }

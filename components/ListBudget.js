@@ -22,6 +22,7 @@ import * as Progress from 'react-native-progress';
 
 import { connect } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
+import HeaderMenu from './HomeScreenHeaderMenu';
 
 const window = Dimensions.get('window');
 const screen = Dimensions.get('screen');
@@ -34,7 +35,7 @@ const ListBudgetHeader = (props) => {
   );
 };
 
-const ListBudget = ({ budgets }) => {
+const ListBudget = ({ budgets, headerMenu }) => {
   const [dimensions, setDimensions] = useState({ window, screen });
 
   const onChange = ({ window, screen }) => {
@@ -53,6 +54,7 @@ const ListBudget = ({ budgets }) => {
       style={styles.flatListContainer}
       sections={budgets}
       stickySectionHeadersEnabled={false}
+      ListHeaderComponent={headerMenu != null ? headerMenu : null}
       keyExtractor={(item, index) => {
         return String(index);
       }}
@@ -96,7 +98,7 @@ const styles = StyleSheet.create({
     // flexShrink: 0,
     // maxHeight: 300,
     // maxHeight: 400,
-    backgroundColor: '#ddd',
+    backgroundColor: '#fff',
     paddingHorizontal: 4,
   },
   listItemContainer: {

@@ -26,7 +26,7 @@ const setObjValue = async (value) => {
 };
 
 const HeaderMenu = (props) => {
-  const [collapsed, toggleCollapsed] = React.useState(false);
+  const [collapsed, toggleCollapsed] = React.useState(true);
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [data, setData] = React.useState({ data: 'After' });
   const navigation = useNavigation();

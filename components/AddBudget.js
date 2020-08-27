@@ -16,58 +16,19 @@ import StyledText from '../components/StyledText';
 const AddBudgetElements = ({ budgets, sendBudget }) => {
   const [budgetNameValue, setBudgetName] = React.useState('');
   const [budgetMaxValue, setBudgetMax] = React.useState('');
-  const [addButtonIsEnabled, setAddButtonIsEnabled] = React.useState(false);
-
-  // Use useEffect and dependency to re-render and check value accordingly
-  // since the setBudgetName and setBudgetMax do not take effect until the next render
-  const validateBudgetMax = (text) => {
-    if (/^\d+$/.test(text.toString()) || /^$/.test(text.toString())) {
-      console.log(`validateBudgetMax beforeSetter: ${text} ${budgetMaxValue}`);
-      setBudgetMax(text);
-      console.log(`validateBudgetMax afterSetter: ${text} ${budgetMaxValue}`);
-    } else {
-      Alert.alert('Invalid input, numbers only.');
-    }
-  };
-
-  const checkWhetherEnableButton = () => {
-    console.log(
-      `checkWhetherEnabledButton: ${checkValuesAreNonEmpty(
-        budgetNameValue,
-      )} ${checkValuesAreNonEmpty(budgetMaxValue)}`,
-    );
-    console.log(
-      `checkWhetherEnabledButton: ${budgetNameValue} ${budgetMaxValue}`,
-    );
-    if (
-      checkValuesAreNonEmpty(budgetNameValue) &&
-      checkValuesAreNonEmpty(budgetMaxValue)
-    ) {
-      setAddButtonIsEnabled(true);
-    }
-  };
-
-  const checkValuesAreNonEmpty = (text) => {
-    if (text) {
-      return true;
-    }
-    return false;
-  };
+  const [addButtonIsEnabled, setAddButtonIsEnabled] = React.useState(true);
 
   const addToBudgetList = () => {
-    if (
-      !checkValuesAreNonEmpty(budgetNameValue) ||
-      !checkValuesAreNonEmpty(budgetMaxValue)
-    ) {
-      Alert.alert("New budget can't have empty values");
-      return false;
+    try {
+      const uuid = uuidv4();
+      const f_budgetMaxValue = parseFloat(budgetMaxValue);
+      sendBudget(uuid, budgetNameValue, f_budgetMaxValue);
+      setBudgetName('');
+      setBudgetMax('');
+      // setAddButtonIsEnabled(false);
+    } catch (err) {
+      console.log('Error adding a budget: ' + err);
     }
-
-    const uuid = uuidv4();
-    sendBudget(uuid, budgetNameValue, budgetMaxValue);
-    setBudgetName('');
-    setBudgetMax('');
-    setAddButtonIsEnabled(false);
   };
 
   return (
@@ -75,11 +36,10 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
       <View style={styles.rowContainer}>
         <TextInput
           style={styles.textInput}
-          // value={budgetNameValue}
+          value={budgetNameValue}
           onChangeText={(text) => {
-            console.log(`budgetName: ${budgetNameValue} ${text}`);
+            console.log(`budgetName: ${budgetNameValue} => ${text}`);
             setBudgetName(text);
-            checkWhetherEnableButton();
           }}
           placeholder="Budget Name"
           maxLength={10}
@@ -87,16 +47,14 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
         <Text style={styles.dollarSign}>$</Text>
         <TextInput
           style={styles.textInput}
-          // value={budgetMaxValue}
+          value={budgetMaxValue}
           onChangeText={(text) => {
             console.log(
-              `budgetMax: ${budgetMaxValue ? budgetMaxValue : 'ValueNone'} ${
+              `budgetMax: ${budgetMaxValue ? budgetMaxValue : 'ValueNone'} => ${
                 text ? text : 'TextNone'
               }`,
             );
-            validateBudgetMax(text);
-            checkWhetherEnableButton();
-            // setIsEdited is set upon validation
+            setBudgetMax(text);
           }}
           keyboardType="decimal-pad"
           placeholder="20.00"
@@ -107,7 +65,9 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
       <ElementsButton
         style={styles.addButton}
         title="Add Budget"
-        onPress={addToBudgetList}
+        onPress={() => {
+          addToBudgetList();
+        }}
         disabled={!addButtonIsEnabled ? true : false}
       />
     </View>
@@ -152,7 +112,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   sendBudget: (budgetId, budgetName, budgetMax) => {
-    console.log(`onSubmit: ${budgetId} ${budgetName} ${budgetMax}`);
+    console.log(`addBudget: ${budgetId} ${budgetName} ${budgetMax}`);
     dispatch(addBudget(budgetId, budgetName, budgetMax));
   },
 });

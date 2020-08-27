@@ -32,6 +32,7 @@ export const text_styles = StyleSheet.create({
   headerText: {
     fontFamily: FONT_FAMILY,
     fontSize: 30,
+    fontWeight: 'bold',
   },
 });
 

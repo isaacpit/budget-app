@@ -191,7 +191,12 @@ const ListTransaction = ({ transactions, budgetId, updateTransaction }) => {
                       const txName = editedTransactionNames[i];
                       const txAmount = parseFloat(editedTransactionAmounts[i]);
                       const txDate = transactions[i].transactionDate;
-                      updateTransaction(txId, txName, txAmount, txDate);
+                      updateTransaction(
+                        txId,
+                        txName,
+                        txAmount,
+                        txDate,
+                      );
                     } catch (err) {
                       // todo better error handling
                       console.log('error: ' + err);
