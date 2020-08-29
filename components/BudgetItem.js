@@ -17,7 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getTransactionsByBudgetId } from '../redux-playground/actions';
 import { color } from 'react-native-reanimated';
 
-const DANGER_THRESHHOLD = .80;
+const DANGER_THRESHHOLD = 0.80;
 
 const getProgress = (transactions, budgetItem) => {
   // let transactionTotal = 0;
@@ -40,7 +40,14 @@ const getRemainingAmount = (transactions, budgetItem) => {
   return budgetItem.budgetMax - getTransactionTotal(transactions);
 };
 
-const BudgetItem = ({ budgetItem, onPressDetails, transactions }) => {
+const BudgetItem = ({
+  budgetItem: budgetItemData,
+  onPressDetails,
+  transactions,
+}) => {
+  console.log(
+    `BudgetItem.budgetItemData: ${JSON.stringify(budgetItemData, null, 2)}`,
+  );
   const navigation = useNavigation();
   const Chevron = () => {
     return (
@@ -57,37 +64,45 @@ const BudgetItem = ({ budgetItem, onPressDetails, transactions }) => {
   };
 
   let colorStatus = 'success';
-  let colorIndicator = 'green';
-  if (getProgress(transactions, budgetItem) > 1.0) {
+  let fillColor = '#dadada';
+  let unfilledColor = 'rgb(82,196,25)';
+  let containerColor = 'rgb(82,196,25)';
+  if (getProgress(transactions, budgetItemData) > 1.0) {
     colorStatus = 'error';
-    colorIndicator = 'red';
-  } else if (getProgress(transactions, budgetItem) > DANGER_THRESHHOLD) {
+    unfilledColor = 'red';
+    containerColor = '#f08080';
+  } else if (getProgress(transactions, budgetItemData) > DANGER_THRESHHOLD) {
     colorStatus = 'warning';
-    colorIndicator = 'orange';
+    unfilledColor = 'orange';
+    containerColor = '#ffdab9';
   }
 
   return (
     <ListItem
       titleStyle={text_styles.largeText}
-      title={budgetItem.budgetName}
+      title={budgetItemData.budgetName}
       subtitle={
         <Progress.Bar
           animated
-          borderWidth={1}
-          borderColor={'#ccc'}
+          // borderWidth={1}
+          // borderColor={'#ccc'}
           height={20}
-          color={colorIndicator}
-          progress={getProgress(transactions, budgetItem)}
+          color={fillColor}
+          unfilledColor={unfilledColor}
+          progress={getProgress(transactions, budgetItemData)}
+          borderColor={containerColor}
+          borderWidth={1.25}
+          borderRadius={15}
         />
       }
       rightTitle={
-        'Left $' + getRemainingAmount(transactions, budgetItem).toFixed(2)
+        'Left $' + getRemainingAmount(transactions, budgetItemData).toFixed(2)
       }
       rightTitleStyle={[text_styles.baseText, { fontSize: 22 }]}
       rightTitleProps={{ flex: 1 }}
       rightSubtitle={
         <Badge
-          value={'Total $' + budgetItem.budgetMax}
+          value={'Total $' + budgetItemData.budgetMax}
           textStyle={{ color: 'white' }}
           status={colorStatus}
           badgeStyle={{ position: 'absolute', right: 0, top: 5, }}
@@ -99,7 +114,7 @@ const BudgetItem = ({ budgetItem, onPressDetails, transactions }) => {
           ? () => {
               navigation.navigate('BudgetDetails', {
                 // budgetId: item.item.budgetId,
-                item: budgetItem,
+                budgetItemData: budgetItemData,
               });
             }
           : null
@@ -108,15 +123,20 @@ const BudgetItem = ({ budgetItem, onPressDetails, transactions }) => {
       bottomDivider
       chevron={onPressDetails === true ? Chevron : null}
       rightContentContainerStyle={{ flex: 0.75 }}
+      // containerStyle={{ backgroundColor: containerColor }}
       // checkmark={true}
     />
   );
 };
 
 const mapStateToProps = (state, ownProps) => {
+  console.log(`budgetItemComponent: ${JSON.stringify(ownProps, null, 2)}`);
   return {
-    budgetItem: state.mapBudgetIdToData[ownProps.item.budgetId],
-    transactions: getTransactionsByBudgetId(state, ownProps.item.budgetId),
+    budgetItem: state.mapBudgetIdToData[ownProps.budgetItemData.budgetId],
+    transactions: getTransactionsByBudgetId(
+      state,
+      ownProps.budgetItemData.budgetId,
+    ),
   };
 };
 

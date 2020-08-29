@@ -37,10 +37,13 @@ const BudgetDetails = ({
   addTransaction,
   ...restProps
 }) => {
-  const [budgetName, setBudgetName] = useState(route.params.item.budgetName);
+  console.log(`budgetDetails: ${JSON.stringify(route.params, null, 2)}`);
+  const [budgetName, setBudgetName] = useState(
+    route.params.budgetItemData.budgetName,
+  );
   const [modalVisible, setModalVisible] = useState(false);
   const [budgetMax, setBudgetMax] = useState(
-    route.params.item.budgetMax.toString(),
+    route.params.budgetItemData.budgetMax.toString(),
   );
   const [transactionName, setTransactionName] = useState('');
   const [transactionAmount, setTransactionAmount] = useState('');
@@ -119,7 +122,7 @@ const BudgetDetails = ({
                     style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
                     onPress={() => {
                       try {
-                        const budgetId = route.params.item.budgetId;
+                        const budgetId = route.params.budgetItemData.budgetId;
                         const txName = transactionName;
                         const txAmount = parseFloat(transactionAmount);
                         const txDate = transactionDate;
@@ -171,13 +174,17 @@ const BudgetDetails = ({
             <ButtonElements
               title="Modify"
               onPress={() => {
-                updateBudget(route.params.item.budgetId, budgetName, budgetMax);
+                updateBudget(
+                  route.params.budgetItemData.budgetId,
+                  budgetName,
+                  budgetMax,
+                );
               }}
             />
           </View>
         </RBSheet>
-        <BudgetItem item={route.params.item} />
-        <ListTransaction budgetId={route.params.item.budgetId} />
+        <BudgetItem budgetItemData={route.params.budgetItemData} />
+        <ListTransaction budgetId={route.params.budgetItemData.budgetId} />
       </View>
     </TouchableWithoutFeedback>
   );

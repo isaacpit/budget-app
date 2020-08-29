@@ -65,18 +65,20 @@ export const deleteTransaction = (budgetId, transactionId) => ({
   budgetId: budgetId,
   transactionId: transactionId,
 });
+
 // separate file
 
 // keep data separate from UI state
 const initialState = {
-  budgets: [],
-  test_counter: 0,
+  // budgets: [],
+  data_loaded: false,
+  // test_counter: 0,
   mapBudgetIdToData: {
     '0': {
-      budgetName: 'Initial Budget',
+      budgetName: 'First Budget',
       budgetMax: 20,
       budgetId: '0',
-      transactionIds: ['44', '45'],
+      transactionIds: ['44'],
     },
   },
   mapTransactionIdToData: {
@@ -86,13 +88,16 @@ const initialState = {
       transactionAmount: 10,
       transactionDate: new Date(),
     },
-    '45': {
-      transactionId: '45',
-      transactionName: 'Kroger',
-      transactionAmount: 5,
-      transactionDate: new Date(),
-    },
   },
+
+  // mapTransactionIdToData: {
+  //   '45': {
+  //     transactionId: '45',
+  //     transactionName: 'Kroger',
+  //     transactionAmount: 5,
+  //     transactionDate: new Date(),
+  //   },
+  // },
 };
 
 // Reducer

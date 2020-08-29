@@ -67,9 +67,9 @@ const ListBudget = ({ budgets, headerMenu, deleteRow }) => {
       keyExtractor={(item, index) => {
         return String(index);
       }}
-      renderItem={(item, rowMap) => {
-        console.log(`budgetItem: ${JSON.stringify(item, null, 2)}`);
-        return <BudgetItem {...item} onPressDetails />;
+      renderItem={(data, rowMap) => {
+        console.log(`budgetItem: ${JSON.stringify(data.item, null, 2)}`);
+        return <BudgetItem budgetItemData={data.item} onPressDetails />;
       }}
       stickySectionHeadersEnabled={false}
       ListHeaderComponent={headerMenu != null ? headerMenu : null}
@@ -92,7 +92,7 @@ const ListBudget = ({ budgets, headerMenu, deleteRow }) => {
         return <ListBudgetHeader title={title} />;
       }}
       // leftOpenValue={75}
-      // disableRightSwipe={true}
+      disableRightSwipe={true}
       // leftOpenValue={-75}
       rightOpenValue={ROW_RIGHT_OPEN_VALUE}
       rightActivationValue={ROW_RIGHT_ACTIVATION_VALUE}
