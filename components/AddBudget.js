@@ -16,7 +16,10 @@ import StyledText from '../components/StyledText';
 const AddBudgetElements = ({ budgets, sendBudget }) => {
   const [budgetNameValue, setBudgetName] = React.useState('');
   const [budgetMaxValue, setBudgetMax] = React.useState('');
-  const [addButtonIsEnabled, setAddButtonIsEnabled] = React.useState(true);
+
+  const checkInputs = () => {
+    return budgetNameValue.length > 0 && budgetMaxValue > 0;
+  };
 
   const addToBudgetList = () => {
     try {
@@ -37,9 +40,11 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
         <TextInput
           style={styles.textInput}
           value={budgetNameValue}
-          onChangeText={(text) => {
-            console.log(`budgetName: ${budgetNameValue} => ${text}`);
-            setBudgetName(text);
+          onChangeText={(newBudgetNameString) => {
+            console.log(
+              `budgetName: ${budgetNameValue} => ${newBudgetNameString} newLength: ${newBudgetNameString.length} `,
+            );
+            setBudgetName(newBudgetNameString);
           }}
           placeholder="Budget Name"
           maxLength={10}
@@ -48,13 +53,24 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
         <TextInput
           style={styles.textInput}
           value={budgetMaxValue}
-          onChangeText={(text) => {
+          onChangeText={(newBudgetMaxString) => {
             console.log(
               `budgetMax: ${budgetMaxValue ? budgetMaxValue : 'ValueNone'} => ${
-                text ? text : 'TextNone'
-              }`,
+                newBudgetMaxString ? newBudgetMaxString : 'TextNone'
+              } newBudgetLength: ${newBudgetMaxString.length}`,
             );
-            setBudgetMax(text);
+            try {
+              const budgetMaxFloatVal = parseFloat(newBudgetMaxString);
+              console.log(
+                'AddBudget::budgetMaxFloatValue = ' + budgetMaxFloatVal,
+              );
+              setBudgetMax(newBudgetMaxString);
+            } catch (ex) {
+              console.log(
+                'Error adding budget. Try again later. Error Message: ' +
+                  ex.toString(),
+              );
+            }
           }}
           keyboardType="decimal-pad"
           placeholder="20.00"
@@ -68,7 +84,7 @@ const AddBudgetElements = ({ budgets, sendBudget }) => {
         onPress={() => {
           addToBudgetList();
         }}
-        disabled={!addButtonIsEnabled ? true : false}
+        disabled={!checkInputs()}
       />
     </View>
   );
