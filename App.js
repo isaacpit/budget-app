@@ -18,7 +18,7 @@ import BottomSheetExample from './components/raw-bottom-sheet/BottomSheetExample
 
 import { Provider } from 'react-redux';
 
-import store from './store';
+// import store from './configureStore';
 
 import { Keyboard } from 'react-native';
 
@@ -48,6 +48,10 @@ import RNSwipeableExample from './views/ReactNativeSwipeableExample';
 import RNSwipeableListExample from './views/ReactNativeSwipeableList';
 
 import AllRNSwipeableListExample from './views/react-native-swipeable-list-view/example';
+
+import { PersistGate } from 'redux-persist/integration/react';
+
+import { persistor, store } from './configureStore';
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -125,17 +129,19 @@ const HeaderButtonRight = () => {
 function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Drawer">
-          <Stack.Screen name="Home" component={DrawerComponent} />
-          <Stack.Screen name="Details" component={DetailsScreen} />
-          <Stack.Screen
-            name="DynamicBottomSheet"
-            component={DynamicBottomSheet}
-          />
-          <Stack.Screen name="BudgetDetails" component={BudgetDetails} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Drawer">
+            <Stack.Screen name="Home" component={DrawerComponent} />
+            <Stack.Screen name="Details" component={DetailsScreen} />
+            <Stack.Screen
+              name="DynamicBottomSheet"
+              component={DynamicBottomSheet}
+            />
+            <Stack.Screen name="BudgetDetails" component={BudgetDetails} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
     </Provider>
   );
 }
@@ -167,7 +173,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#aaa',
     margin: 4,
     padding: 3,
-  }
+  },
 });
 
 export default App;

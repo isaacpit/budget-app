@@ -227,7 +227,7 @@ const ListTransaction = ({ transactions, budgetId, updateTransaction }) => {
                   style={styles.smallEditIcon}
                 />
                 <Text style={styles.textDate}>
-                  {item.transactionDate.toLocaleDateString()}
+                  {new Date(item.transactionDate).toLocaleDateString()}
                 </Text>
               </View>
             </TouchableOpacity>

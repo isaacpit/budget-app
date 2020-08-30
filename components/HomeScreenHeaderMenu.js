@@ -6,6 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
+import { connect } from 'react-redux';
+
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Header } from 'react-native/Libraries/NewAppScreen';
 
@@ -25,7 +27,7 @@ const setObjValue = async (value) => {
   }
 };
 
-const HeaderMenu = (props) => {
+const HeaderMenu = ({}) => {
   const [collapsed, toggleCollapsed] = React.useState(true);
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [data, setData] = React.useState({ data: 'After' });

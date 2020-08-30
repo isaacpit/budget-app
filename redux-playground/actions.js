@@ -71,7 +71,6 @@ export const deleteTransaction = (budgetId, transactionId) => ({
 // keep data separate from UI state
 const initialState = {
   // budgets: [],
-  data_loaded: false,
   // test_counter: 0,
   mapBudgetIdToData: {
     '0': {
@@ -84,24 +83,15 @@ const initialState = {
   mapTransactionIdToData: {
     '44': {
       transactionId: '44',
-      transactionName: 'HEB',
-      transactionAmount: 10,
+      transactionName: 'Grocery Trip',
+      transactionAmount: 5,
       transactionDate: new Date(),
     },
   },
-
-  // mapTransactionIdToData: {
-  //   '45': {
-  //     transactionId: '45',
-  //     transactionName: 'Kroger',
-  //     transactionAmount: 5,
-  //     transactionDate: new Date(),
-  //   },
-  // },
 };
 
 // Reducer
-const budgetApp = (state = initialState, action) => {
+const budgetAppReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_BUDGET:
       return Object.assign({}, state, {
@@ -199,7 +189,7 @@ const budgetApp = (state = initialState, action) => {
           }
           ${typeof txId} ${typeof transactionIdToDelete}`,
         );
-        // should this be !== ? 
+        // should this be !== ?
         return txId != transactionIdToDelete;
       });
       console.log(
@@ -246,4 +236,4 @@ export function getTransactionsByBudgetId(state, budgetId) {
   return transactionsData;
 }
 
-export default budgetApp;
+export default budgetAppReducer;

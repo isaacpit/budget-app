@@ -45,9 +45,6 @@ const BudgetItem = ({
   onPressDetails,
   transactions,
 }) => {
-  console.log(
-    `BudgetItem.budgetItemData: ${JSON.stringify(budgetItemData, null, 2)}`,
-  );
   const navigation = useNavigation();
   const Chevron = () => {
     return (
@@ -130,7 +127,6 @@ const BudgetItem = ({
 };
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(`budgetItemComponent: ${JSON.stringify(ownProps, null, 2)}`);
   return {
     budgetItem: state.mapBudgetIdToData[ownProps.budgetItemData.budgetId],
     transactions: getTransactionsByBudgetId(
