@@ -51,142 +51,140 @@ const BudgetDetails = ({
 
   const bottomSheetRef = useRef(null);
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.rowContainer}>
-          <ButtonElements
-            onPress={() => {
-              bottomSheetRef.current.open();
-            }}
-            style={{ margin: 10 }}
-            icon={<Icon name="edit" size={40} color="black" />}
-            type="outline"
-          />
-          <ButtonElements
-            onPress={() => {
-              setModalVisible(!modalVisible);
-            }}
-            style={{ margin: 10 }}
-            icon={<Icon name="add" size={40} color="black" />}
-            type="outline"
-          />
-        </View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-          }}>
-          <TouchableWithoutFeedback
-            onPress={Keyboard.dismiss}
-            accessible={false}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>Add a Transaction</Text>
-                <View style={{ ...styles.inputRowContainer }}>
-                  <Text style={styles.labelStyle}>Name</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    value={transactionName}
-                    placeholder="Groceries"
-                    onChangeText={(text) => setTransactionName(text)}
-                  />
-                </View>
-                <View style={{ ...styles.inputRowContainer }}>
-                  <Text style={styles.labelStyle}>Amount</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    value={transactionAmount}
-                    keyboardType="decimal-pad"
-                    placeholder="20.00"
-                    onChangeText={(text) => setTransactionAmount(text)}
-                  />
-                </View>
-                <DatePicker
-                  date={transactionDate}
-                  onDateChange={setTransactionDate}
-                  mode={'date'}
-                  style={{ height: 150 }}
+    <View onPress={Keyboard.dismiss} accessible={false} style={{ flex: 1}}>
+      <View style={styles.rowContainer}>
+        <ButtonElements
+          onPress={() => {
+            bottomSheetRef.current.open();
+          }}
+          style={{ margin: 10 }}
+          icon={<Icon name="edit" size={40} color="black" />}
+          type="outline"
+        />
+        <ButtonElements
+          onPress={() => {
+            setModalVisible(!modalVisible);
+          }}
+          style={{ margin: 10 }}
+          icon={<Icon name="add" size={40} color="black" />}
+          type="outline"
+        />
+      </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+        }}>
+        <TouchableWithoutFeedback
+          onPress={Keyboard.dismiss}
+          accessible={false}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Add a Transaction</Text>
+              <View style={{ ...styles.inputRowContainer }}>
+                <Text style={styles.labelStyle}>Name</Text>
+                <TextInput
+                  style={styles.textInput}
+                  value={transactionName}
+                  placeholder="Groceries"
+                  onChangeText={(text) => setTransactionName(text)}
                 />
+              </View>
+              <View style={{ ...styles.inputRowContainer }}>
+                <Text style={styles.labelStyle}>Amount</Text>
+                <TextInput
+                  style={styles.textInput}
+                  value={transactionAmount}
+                  keyboardType="decimal-pad"
+                  placeholder="20.00"
+                  onChangeText={(text) => setTransactionAmount(text)}
+                />
+              </View>
+              <DatePicker
+                date={transactionDate}
+                onDateChange={setTransactionDate}
+                mode={'date'}
+                style={{ height: 150 }}
+              />
 
-                <View style={{ ...styles.rowContainer, width: 250, margin: 8, }}>
-                  <TouchableHighlight
-                    style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                    onPress={() => {
+              <View style={{ ...styles.rowContainer, width: 250, margin: 8, }}>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                  }}>
+                  <Text style={styles.textStyle}>Cancel</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                  onPress={() => {
+                    try {
+                      const budgetId = route.params.budgetItemData.budgetId;
+                      const txName = transactionName;
+                      const txAmount = parseFloat(transactionAmount);
+                      const txDate = transactionDate;
+                      const txId = uuidv4();
+                      console.log(
+                        `budgetId: ${budgetId}\ntxId: ${txId}\ntxName: ${txName}\ntxAmount: ${txAmount}\ntxDate: ${txDate}`,
+                      );
+                      addTransaction(
+                        budgetId,
+                        txId,
+                        txName,
+                        txAmount,
+                        txDate,
+                      );
                       setModalVisible(!modalVisible);
-                    }}>
-                    <Text style={styles.textStyle}>Cancel</Text>
-                  </TouchableHighlight>
-                  <TouchableHighlight
-                    style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                    onPress={() => {
-                      try {
-                        const budgetId = route.params.budgetItemData.budgetId;
-                        const txName = transactionName;
-                        const txAmount = parseFloat(transactionAmount);
-                        const txDate = transactionDate;
-                        const txId = uuidv4();
-                        console.log(
-                          `budgetId: ${budgetId}\ntxId: ${txId}\ntxName: ${txName}\ntxAmount: ${txAmount}\ntxDate: ${txDate}`,
-                        );
-                        addTransaction(
-                          budgetId,
-                          txId,
-                          txName,
-                          txAmount,
-                          txDate,
-                        );
-                        setModalVisible(!modalVisible);
-                      } catch (err) {
-                        console.log(
-                          'error creating transaction: ' + err.toString(),
-                        );
-                      }
-                    }}>
-                    <Text style={styles.textStyle}>Save</Text>
-                  </TouchableHighlight>
-                </View>
+                    } catch (err) {
+                      console.log(
+                        'error creating transaction: ' + err.toString(),
+                      );
+                    }
+                  }}>
+                  <Text style={styles.textStyle}>Save</Text>
+                </TouchableHighlight>
               </View>
             </View>
-          </TouchableWithoutFeedback>
-        </Modal>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
 
-        <RBSheet
-          closeOnDragDown
-          ref={bottomSheetRef}
-          height={330}
-          customStyles={bottomSheetObj}>
-          <View style={styles.listContainer}>
-            <Text style={styles.listTitle}>Create</Text>
-            <View style={styles.rowContainer}>
-              <TextInput
-                style={styles.textInput}
-                value={budgetName}
-                onChangeText={(text) => setBudgetName(text)}
-              />
-              <TextInput
-                style={styles.textInput}
-                value={budgetMax}
-                onChangeText={(text) => setBudgetMax(text)}
-              />
-            </View>
-            <ButtonElements
-              title="Modify"
-              onPress={() => {
-                updateBudget(
-                  route.params.budgetItemData.budgetId,
-                  budgetName,
-                  budgetMax,
-                );
-              }}
+      <RBSheet
+        closeOnDragDown
+        ref={bottomSheetRef}
+        height={330}
+        customStyles={bottomSheetObj}>
+        <View style={styles.listContainer}>
+          <Text style={styles.listTitle}>Create</Text>
+          <View style={styles.rowContainer}>
+            <TextInput
+              style={styles.textInput}
+              value={budgetName}
+              onChangeText={(text) => setBudgetName(text)}
+            />
+            <TextInput
+              style={styles.textInput}
+              value={budgetMax}
+              onChangeText={(text) => setBudgetMax(text)}
             />
           </View>
-        </RBSheet>
-        <BudgetItem budgetItemData={route.params.budgetItemData} />
-        <ListTransaction budgetId={route.params.budgetItemData.budgetId} />
-      </View>
-    </TouchableWithoutFeedback>
+          <ButtonElements
+            title="Modify"
+            onPress={() => {
+              updateBudget(
+                route.params.budgetItemData.budgetId,
+                budgetName,
+                budgetMax,
+              );
+            }}
+          />
+        </View>
+      </RBSheet>
+      <BudgetItem budgetItemData={route.params.budgetItemData} />
+      <ListTransaction budgetId={route.params.budgetItemData.budgetId} />
+    </View>
   );
 };
 

@@ -150,7 +150,6 @@ const styles = StyleSheet.create({
   topLevelContainer: {
     flex: 1,
     // alignItems: 'center',
-    justifyContent: 'flex-start',
   },
   baseText: {
     fontFamily: 'Cochin',

@@ -6,7 +6,7 @@ const FONT_FAMILY = 'Cochin';
 
 const StyledText = (props) => {
   return (
-    <Text {...props} style={text_styles.baseText}>
+    <Text {...props} style={[text_styles.baseText, props.style]}>
       {props.children}
     </Text>
   );
@@ -14,7 +14,7 @@ const StyledText = (props) => {
 
 export const StyledHeader = (props) => {
   return (
-    <Text {...props} style={text_styles.headerText}>
+    <Text style={text_styles.headerText} {...props} >
       {props.children}
     </Text>
   );

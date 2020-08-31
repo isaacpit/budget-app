@@ -13,6 +13,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
+import SectionList from '../views/ReactNativeSwipeableList';
+import { SwipeListView } from 'react-native-swipe-list-view';
+
+import StyledText from './StyledText';
+
 // loop through obj and return true if any of the values are true
 const checkAnyTrue = (obj) => {
   return Object.values(obj).some((x) => x === true);
@@ -24,15 +29,35 @@ const getTransactionTotal = (transactions) => {
   }, 0);
 };
 
-const ListTransaction = ({ transactions, budgetId, updateTransaction }) => {
+const ListTransaction = ({
+  transactionsSectionData,
+  budgetId,
+  updateTransaction,
+}) => {
+  const transactionsListData = transactionsSectionData[0].data;
   let initialIsEditingState = {};
-  let initialEditedTransactionNames = new Array(transactions.length);
-  let initialEditedTransactionAmounts = new Array(transactions.length);
-  let initialEditedTransactionDates = new Array(transactions.length);
-  for (let i = 0; i < transactions.length; ++i) {
-    initialEditedTransactionNames[i] = transactions[i].transactionName;
-    initialEditedTransactionAmounts[i] = transactions[i].transactionAmount;
-    initialEditedTransactionDates[i] = transactions[i].transactionDate;
+  let initialEditedTransactionNames = new Array(transactionsListData.length);
+  let initialEditedTransactionAmounts = new Array(transactionsListData.length);
+  let initialEditedTransactionDates = new Array(transactionsListData.length);
+  console.log(
+    `ListTransaction::transactionsSectionData: ${JSON.stringify(
+      transactionsSectionData,
+      null,
+      2,
+    )}`,
+  );
+  console.log(
+    `ListTransaction::transactionsListData: ${JSON.stringify(
+      transactionsListData,
+      null,
+      2,
+    )}`,
+  );
+  for (let i = 0; i < transactionsListData.length; ++i) {
+    initialEditedTransactionNames[i] = transactionsListData[i].transactionName;
+    initialEditedTransactionAmounts[i] =
+      transactionsListData[i].transactionAmount;
+    initialEditedTransactionDates[i] = transactionsListData[i].transactionDate;
     initialIsEditingState[i] = false;
   }
   console.log(
@@ -135,7 +160,9 @@ const ListTransaction = ({ transactions, budgetId, updateTransaction }) => {
 
   // const [editedTransactions, setEditedTransactions] = useState(new Array(transactions.length));
   console.log(`editedTransactions: ${JSON.stringify(isEditingTransactions)}`);
-  console.log(`listTransactions: \n${JSON.stringify(transactions, null, 2)}`);
+  console.log(
+    `listTransactions: \n${JSON.stringify(transactionsSectionData, null, 2)}`,
+  );
   console.log('any: ' + checkAnyTrue(isEditingTransactions));
 
   // check if new transaction was added, if so
@@ -143,8 +170,8 @@ const ListTransaction = ({ transactions, budgetId, updateTransaction }) => {
   // this fixes a bug where the edited transaction values do not reflect
   // the actual transactions
   if (
-    transactions.length !== editedTransactionAmounts.length &&
-    transactions.length !== editedTransactionNames.length
+    transactionsListData.length !== editedTransactionAmounts.length &&
+    transactionsListData.length !== editedTransactionNames.length
   ) {
     setEditedTransactionAmounts(initialEditedTransactionAmounts);
     setEditedTransactionNames(initialEditedTransactionNames);
@@ -153,17 +180,19 @@ const ListTransaction = ({ transactions, budgetId, updateTransaction }) => {
 
   const SaveAllEdits = () => {
     console.log('Saving edited transactions...');
-    for (let i = 0; i < transactions.length; ++i) {
+    for (let i = 0; i < transactionsListData.length; ++i) {
       if (isEditingTransactions[i]) {
         console.log(`saving: ${i}`);
-        console.log(`transaction: ${JSON.stringify(transactions[i], null, 2)}`);
+        console.log(
+          `transaction: ${JSON.stringify(transactionsListData[i], null, 2)}`,
+        );
 
         // TODO
         try {
-          const txId = transactions[i].transactionId;
+          const txId = transactionsListData[i].transactionId;
           const txName = editedTransactionNames[i];
           const txAmount = parseFloat(editedTransactionAmounts[i]);
-          const txDate = transactions[i].transactionDate;
+          const txDate = transactionsListData[i].transactionDate;
           updateTransaction(txId, txName, txAmount, txDate);
         } catch (err) {
           // todo better error handling
@@ -177,12 +206,82 @@ const ListTransaction = ({ transactions, budgetId, updateTransaction }) => {
     console.log('Cancelling editing transactions...');
     setIsEditingTransactions(initialIsEditingState);
   };
+  const createTransactionItem = ({ item, index }, rowMap) => {
+    console.log('createTransactionItem: ' + JSON.stringify(item, null, 2));
+    console.log('index: ' + index);
+    return (
+      <View style={[styles.rowContainer, styles.smallPadding]} key={index}>
+        {/* Transaction Date  */}
+        <TouchableOpacity
+          key={index}
+          onPress={() =>
+            setIsEditingTransactions((prevState) => ({
+              ...prevState,
+              [index]: !prevState[index],
+            }))
+          }
+          // eslint-disable-next-line prettier/prettier
+          style={styles.editButton}
+        >
+          <View style={[styles.rowContainer, { padding: 6 }]}>
+            <Icon
+              name="edit"
+              size={20}
+              color="black"
+              style={styles.smallEditIcon}
+            />
+            <StyledText style={styles.textDate}>
+              {new Date(item.transactionDate).toLocaleDateString()}
+            </StyledText>
+          </View>
+        </TouchableOpacity>
+        {/* Transaction Name */}
+        <View style={[styles.rowContainer, { flex: 1 }]}>
+          {isEditingTransactions[index] === true ? (
+            <TextInput
+              style={[styles.textInput, styles.flexGrow]}
+              value={editedTransactionNames[index]}
+              placeholder={item.transactionName}
+              onChangeText={modifyTransactionNames(index)}
+            />
+          ) : (
+            <StyledText style={[styles.flexGrow, styles.textNoInput]}>
+              {item.transactionName}
+            </StyledText>
+          )}
+          {/* Transaction Amount */}
+          {isEditingTransactions[index] === true ? (
+            <TextInput
+              style={[styles.textInput, styles.flexGrow]}
+              // value={editedTransactions[index]}
+              placeholder={item.transactionAmount.toString()}
+              value={editedTransactionAmounts[index].toString()}
+              onChangeText={modifyTransactionAmounts(index)}
+            />
+          ) : (
+            <StyledText style={[styles.listAmount, styles.flexGrow]}>
+              {parseFloat(item.transactionAmount).toFixed(2)}
+            </StyledText>
+          )}
+        </View>
+      </View>
+    );
+  };
   return (
     <View style={styles.topLevelContainer}>
+      <SwipeListView
+        useSectionList
+        stickySectionHeadersEnabled={false}
+        sections={transactionsSectionData}
+        keyExtractor={(item, index) => {
+          return String(index);
+        }}
+        renderItem={createTransactionItem}
+      />
       <View style={styles.rowContainer}>
-        <Text style={styles.header}>Transactions</Text>
+        {/* <StyledText style={styles.header}>Transactions</StyledText> */}
         {checkAnyTrue(isEditingTransactions) && (
-          <View style={[styles.rowContainer, { padding: 0 }]}>
+          <View style={[styles.rowContainer, { padding: 8 }]}>
             <ButtonElements
               type="outline"
               title="Cancel"
@@ -203,73 +302,13 @@ const ListTransaction = ({ transactions, budgetId, updateTransaction }) => {
         )}
       </View>
       {/* TODO: change to flatlist */}
-      
-      {transactions.map((item, index) => {
-        return (
-          <View style={styles.rowContainer} key={index}>
-            <TouchableOpacity
-              key={index}
-              onPress={() =>
-                setIsEditingTransactions((prevState) => ({
-                  ...prevState,
-                  [index]: !prevState[index],
-                }))
-              }
-              // eslint-disable-next-line prettier/prettier
-              style={styles.editButton}
-            >
-              <View style={styles.rowContainer}>
-                <Icon
-                  name="edit"
-                  size={20}
-                  color="black"
-                  style={styles.smallEditIcon}
-                />
-                <Text style={styles.textDate}>
-                  {new Date(item.transactionDate).toLocaleDateString()}
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <View style={[styles.rowContainer, { flex: 1 }]}>
-              {isEditingTransactions[index] === true ? (
-                <TextInput
-                  style={[styles.textInput, styles.flexGrow]}
-                  value={editedTransactionNames[index]}
-                  placeholder={item.transactionName}
-                  onChangeText={modifyTransactionNames(index)}
-                />
-              ) : (
-                <Text style={[styles.flexGrow, styles.textNoInput]}>
-                  {item.transactionName}
-                </Text>
-              )}
-
-              {isEditingTransactions[index] === true ? (
-                <TextInput
-                  style={[styles.textInput, styles.flexGrow]}
-                  // value={editedTransactions[index]}
-                  placeholder={item.transactionAmount.toString()}
-                  value={editedTransactionAmounts[index].toString()}
-                  onChangeText={modifyTransactionAmounts(index)}
-                />
-              ) : (
-                <Text
-                  style={[
-                    styles.listAmount,
-                    styles.flexGrow,
-                    styles.textNoInput,
-                  ]}>
-                  {parseFloat(item.transactionAmount).toFixed(2)}
-                </Text>
-              )}
-            </View>
-          </View>
-        );
-      })}
+      {/* {transactions.map(createTransactionItem)} */}
       <View style={styles.line} />
-      <View style={styles.rowContainer}>
-        <Text>Total: </Text>
-        <Text>{getTransactionTotal(transactions).toFixed(2)}</Text>
+      <View style={[styles.rowContainer, { padding: 6 }]}>
+        <StyledText style={styles.textTotalAmount}>Total: </StyledText>
+        <StyledText style={styles.textTotalAmount}>
+          $ {getTransactionTotal(transactionsListData).toFixed(2)}
+        </StyledText>
       </View>
     </View>
   );
@@ -278,12 +317,15 @@ const ListTransaction = ({ transactions, budgetId, updateTransaction }) => {
 const styles = StyleSheet.create({
   topLevelContainer: {
     padding: 8,
+    flex: 1,
   },
   rowContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
+  },
+  smallPadding: {
+    padding: 8,
   },
   editButton: {
     backgroundColor: '#ddd',
@@ -307,7 +349,9 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   line: {
-    borderWidth: 5,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 4,
   },
   textInput: {
     backgroundColor: 'white',
@@ -320,6 +364,13 @@ const styles = StyleSheet.create({
     padding: 4,
     textAlign: 'right',
     margin: 4,
+    fontSize: 18,
+  },
+  textDate: {
+    fontSize: 17,
+  },
+  textTotalAmount: {
+    fontSize: 30,
   },
   datePicker: {
     width: 200,
@@ -333,8 +384,14 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state, ownProps) => {
   let transactionsData = getTransactionsByBudgetId(state, ownProps.budgetId);
+  const final_result = [
+    {
+      data: transactionsData,
+      title: 'Transactions',
+    },
+  ];
   return {
-    transactions: transactionsData,
+    transactionsSectionData: final_result,
   };
 };
 
