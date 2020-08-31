@@ -16,8 +16,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { persistStore, persistReducer } from 'redux-persist';
 
-const DATA_KEY = '@data_key';
-
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,

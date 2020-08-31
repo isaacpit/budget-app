@@ -70,20 +70,23 @@ const HeaderMenu = ({}) => {
         </View>
       </TouchableOpacity>
       <Collapsible collapsed={collapsed} align="center">
-        <View style={styles.devConsole}>
-          <Button
-            style={styles.verticalSpacing}
-            title="Save Data Async"
-            onPress={() => setObjValue(data)}
-          />
-          <Button
-            style={styles.verticalSpacing}
-            title="Load Data Async"
-            onPress={() => loadData()}
-          />
-          <Text styles={styles.verticalSpacing}>
-            Data: {JSON.stringify(data, null, 2)}
-          </Text>
+        <View style={styles.devContainer}>
+          <View style={styles.devConsole}>
+            <Text style={styles.devH1}>Secret Dev Menu</Text>
+            <Button
+              style={styles.verticalSpacing}
+              title="Save Data Async"
+              onPress={() => setObjValue(data)}
+            />
+            <Button
+              style={styles.verticalSpacing}
+              title="Load Data Async"
+              onPress={() => loadData()}
+            />
+            <Text styles={styles.verticalSpacing}>
+              Data: {JSON.stringify(data, null, 2)}
+            </Text>
+          </View>
         </View>
       </Collapsible>
       <AddBudgetElements />
@@ -92,9 +95,20 @@ const HeaderMenu = ({}) => {
 };
 
 const styles = StyleSheet.create({
+  devH1: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontFamily: 'Hiragino Sans',
+  },
+  devContainer: {
+    margin: 4,
+    borderRadius: 8,
+    backgroundColor: '#eee8d5',
+  },
   devConsole: {
-    backgroundColor: '#e6ffcc',
-    margin: 20,
+    backgroundColor: '#fdf6e3',
+    margin: 12,
+    padding: 8,
   },
   topLevelContainer: {
     flex: 1,

@@ -147,10 +147,6 @@ function App() {
 }
 
 const styles = StyleSheet.create({
-  devConsole: {
-    backgroundColor: '#e6ffcc',
-    margin: 20,
-  },
   topLevelContainer: {
     flex: 1,
     // alignItems: 'center',
