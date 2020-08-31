@@ -140,6 +140,8 @@ const ListTransaction = ({ transactions, budgetId, updateTransaction }) => {
 
   // check if new transaction was added, if so
   // reset to the new initial values
+  // this fixes a bug where the edited transaction values do not reflect
+  // the actual transactions
   if (
     transactions.length !== editedTransactionAmounts.length &&
     transactions.length !== editedTransactionNames.length
@@ -149,6 +151,32 @@ const ListTransaction = ({ transactions, budgetId, updateTransaction }) => {
     setEditedTransactionDates(initialEditedTransactionDates);
   }
 
+  const SaveAllEdits = () => {
+    console.log('Saving edited transactions...');
+    for (let i = 0; i < transactions.length; ++i) {
+      if (isEditingTransactions[i]) {
+        console.log(`saving: ${i}`);
+        console.log(`transaction: ${JSON.stringify(transactions[i], null, 2)}`);
+
+        // TODO
+        try {
+          const txId = transactions[i].transactionId;
+          const txName = editedTransactionNames[i];
+          const txAmount = parseFloat(editedTransactionAmounts[i]);
+          const txDate = transactions[i].transactionDate;
+          updateTransaction(txId, txName, txAmount, txDate);
+        } catch (err) {
+          // todo better error handling
+          console.log('error: ' + err);
+        }
+      }
+    }
+    setIsEditingTransactions(initialIsEditingState);
+  };
+  const ResetAllEdits = () => {
+    console.log('Cancelling editing transactions...');
+    setIsEditingTransactions(initialIsEditingState);
+  };
   return (
     <View style={styles.topLevelContainer}>
       <View style={styles.rowContainer}>
@@ -161,10 +189,7 @@ const ListTransaction = ({ transactions, budgetId, updateTransaction }) => {
               titleStyle={{ padding: 4 }}
               style={styles.transactionButtons}
               icon={<Icon name="cancel" size={20} color="black" />}
-              onPress={() => {
-                console.log('Cancelling editing transactions...');
-                setIsEditingTransactions(initialIsEditingState);
-              }}
+              onPress={ResetAllEdits}
             />
             <ButtonElements
               type="outline"
@@ -172,39 +197,13 @@ const ListTransaction = ({ transactions, budgetId, updateTransaction }) => {
               titleStyle={{ padding: 4 }}
               icon={<Icon name="save" size={20} color="black" />}
               style={styles.transactionButtons}
-              onPress={() => {
-                console.log('Saving edited transactions...');
-                for (let i = 0; i < transactions.length; ++i) {
-                  if (isEditingTransactions[i]) {
-                    console.log(`saving: ${i}`);
-                    console.log(
-                      `transaction: ${JSON.stringify(
-                        transactions[i],
-                        null,
-                        2,
-                      )}`,
-                    );
-
-                    // TODO
-                    try {
-                      const txId = transactions[i].transactionId;
-                      const txName = editedTransactionNames[i];
-                      const txAmount = parseFloat(editedTransactionAmounts[i]);
-                      const txDate = transactions[i].transactionDate;
-                      updateTransaction(txId, txName, txAmount, txDate);
-                    } catch (err) {
-                      // todo better error handling
-                      console.log('error: ' + err);
-                    }
-                  }
-                }
-                setIsEditingTransactions(initialIsEditingState);
-              }}
+              onPress={SaveAllEdits}
             />
           </View>
         )}
       </View>
       {/* TODO: change to flatlist */}
+      
       {transactions.map((item, index) => {
         return (
           <View style={styles.rowContainer} key={index}>
